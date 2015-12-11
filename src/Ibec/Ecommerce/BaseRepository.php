@@ -2,6 +2,8 @@
 
 namespace Ibec\Ecommerce;
 
+use Exception;
+
 abstract class BaseRepository
 {
     protected $modelName;
@@ -36,8 +38,8 @@ abstract class BaseRepository
                 $filters[] = [$attribute,$rule,$vl];
             }
         }
-        $modelName = $this->modelName;
-        $ret = $modelName::where($params)->orderBy($sort[0], $sort[1])->paginate($limit);
+
+        $ret = $this->query()->where($params)->orderBy($sort[0], $sort[1])->paginate($limit);
 
         return $ret;
     }
@@ -51,9 +53,9 @@ abstract class BaseRepository
     {
         $modelName = $this->modelName;
         if (is_array($id)) {
-            $modelName::whereIn('id', $id)->delete();
+            $this->query()->whereIn('id', $id)->delete();
         } else {
-            $modelName::where('id', $id)->delete();
+            $this->query()->where('id', $id)->delete();
         }
     }
 
@@ -73,8 +75,7 @@ abstract class BaseRepository
      */
     public function findByPk($id)
     {
-        $modelName = $this->modelName;
-        $ret = $modelName::find($id);
+        $ret = $this->query()->find($id);
         if ($ret) {
             return $ret;
         }
@@ -120,5 +121,10 @@ abstract class BaseRepository
                 }
             }
         }
+    }
+
+    protected function query()
+    {
+        return (new $this->modelName)->newQuery();
     }
 }

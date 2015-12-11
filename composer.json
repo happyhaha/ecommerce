@@ -1,0 +1,28 @@
+{
+	"name": "ibec/ecommerce",
+	"description": "",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Eldar Amantay",
+			"email": "amantay.eldar@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"illuminate/support": "5.0.*"
+	},
+	"autoload": {
+		"classmap": [
+			"database/seeds"
+		],
+		"psr-0": {
+			"Ibec\\Ecommerce": "src/"
+		}
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-1.0": "1.x-dev"
+		}
+	}
+}

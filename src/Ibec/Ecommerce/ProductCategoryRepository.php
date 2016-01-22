@@ -30,10 +30,14 @@ class ProductCategoryRepository extends BaseRepository
         if ($model->validate($input)) {
 
             $model->fill($input);
+            if (!$model->exists) {
+                $model->slug = $model->createSlug($input['ru']['title']);
+            }
             $model->save();
             $this->saveNodes($model, 'product_category_id', $input);
 
             $filters = array_get($inputData, 'FilterGroup', []);
+
             $filterIds = [];
             foreach ($filters as $filterData) {
                 if (isset($filterData['id']) && $filterData['id']!='') {
@@ -43,12 +47,15 @@ class ProductCategoryRepository extends BaseRepository
                     $filterGroup = new FilterGroup();
                     $filterGroup->fill($filterData);
                     $filterGroup->product_category_id = $model->id;
-                    $filterGroup->save();
+                    if ($filterGroup->validate($filterData)) {
+                        $filterGroup->save();
+                    }
                 }
 
-                $filterIds[] = $filterGroup->id;
-
-                $this->saveNodes($filterGroup, 'filter_group_id', $filterData);
+                if ($filterGroup->id) {
+                    $filterIds[] = $filterGroup->id;
+                    $this->saveNodes($filterGroup, 'filter_group_id', $filterData);
+                }
             }
 
             FilterGroup::where('product_category_id', '=', $model->id)->whereNotIn('id', $filterIds)->delete();

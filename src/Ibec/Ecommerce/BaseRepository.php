@@ -19,12 +19,12 @@ abstract class BaseRepository
     {
         $filters = [];
 
-        $limit = isset($params['limit'])?$params['limit']:15;
-        $sort = ['id','desc'];
+        $limit = isset($params['limit']) ? $params['limit'] : 15;
+        $sort = ['id', 'desc'];
 
         if (isset($params['sort'])) {
             $sortParams = explode('_', $params['sort']);
-            if ($sortParams[2]=='asc' || $sortParams[2]=='desc') {
+            if ($sortParams[2] == 'asc' || $sortParams[2] == 'desc') {
                 $sort = $sortParams;
             }
         }
@@ -32,14 +32,14 @@ abstract class BaseRepository
         foreach ($this->paramRules as $attribute => $rule) {
             if (isset($params[$attribute]) && !empty($params[$attribute])) {
                 $vl = $params[$attribute];
-                if ($rule=='like') {
-                    $vl = '%'.$vl.'%';
+                if ($rule == 'like') {
+                    $vl = '%' . $vl . '%';
                 }
-                $filters[] = [$attribute,$rule,$vl];
+                $filters[] = [$attribute, $rule, $vl];
             }
         }
 
-        $ret = $this->query()->where($params)->orderBy($sort[0], $sort[1])->paginate($limit);
+        $ret = $this->query()->where($filters)->orderBy($sort[0], $sort[1])->paginate($limit);
 
         return $ret;
     }
@@ -123,8 +123,66 @@ abstract class BaseRepository
         }
     }
 
-    protected function query()
+    public function query()
     {
         return (new $this->modelName)->newQuery();
     }
+
+    /**
+     * @param $model
+     * @return bool
+     */
+    public function hasImages($model)
+    {
+        $traitList = class_uses($model);
+        $hasImages = false;
+        foreach ($traitList as $trait) {
+            if (mb_strpos($trait, 'HasImage', 0, 'UTF-8')!==false) {
+                $hasImages = true;
+            }
+        }
+
+        return $hasImages;
+    }
+
+    /**
+     * @param $model
+     * @param $data array
+     * @return void
+     */
+    protected function saveImage($model, $data = [])
+    {
+        $image_id = array_get($data, 'image_id', null);
+        if ($image_id) {
+            $model->images()->sync([
+                $image_id => [
+                    'title' => array_get($data, 'image_title'),
+                    'alt' => array_get($data, 'image_alt'),
+                    'cropped_coords' => array_get($data, 'cropped_coords', null)
+                ]
+            ]);
+        } else {
+            $model->images()->detach();
+        }
+    }
+
+    protected function saveFiles($model, $data = [])
+    {
+        if ($files = array_get($data, 'fields.files')) {
+            $model->files()->detach();
+
+            foreach ($files as $field_slug => $file_id) {
+                if ($file_id) {
+                    $model->files()->attach([
+                        $file_id => [
+                            'field_slug' => $field_slug,
+                        ]
+                    ]);
+                }
+            }
+        } else {
+            $model->files()->detach();
+        }
+    }
+
 }

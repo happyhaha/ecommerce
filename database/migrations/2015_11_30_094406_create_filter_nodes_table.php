@@ -14,7 +14,7 @@ class CreateFilterNodesTable extends Migration
     public function up()
     {
         Schema::create('filter_nodes', function (Blueprint $table) {
-            $table->unsignedInteger('filter_id');
+            $table->unsignedInteger('filter_id')->nullable();
             $table->char('language_id', 2);
             $table->string('title', 60);
 

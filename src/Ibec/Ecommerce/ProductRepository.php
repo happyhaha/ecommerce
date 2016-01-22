@@ -2,6 +2,7 @@
 
 namespace Ibec\Ecommerce;
 
+use DB;
 use Ibec\Ecommerce\Database\Product as MainModel;
 use Ibec\Ecommerce\Database\ProductBrand;
 use Ibec\Ecommerce\Database\Filter;
@@ -29,8 +30,10 @@ class ProductRepository extends BaseRepository
     {
         $mainData = array_get($input, 'Product', []);
         if ($model->validate($mainData)) {
-//            dd($_POST);
-            $model->fill($input);
+            $model->fill($mainData);
+            if (!$model->exists) {
+                $model->slug = $model->createSlug($mainData['ru']['title']);
+            }
             $model->save();
             $this->saveNodes($model, 'product_id', $mainData);
 
@@ -46,6 +49,34 @@ class ProductRepository extends BaseRepository
                 $model->categories()->sync($categoryIds);
             } else {
                 $model->categories()->detach();
+            }
+
+            // Привязываем отрасли
+            $sectorIds = [];
+            $sectorData = array_get($input, 'ProductSector', []);
+            foreach ($sectorData as $item) {
+                if ($item['checked']==1) {
+                    $sectorIds[] = $item['id'];
+                }
+            }
+            if ($sectorIds) {
+                $model->sectors()->sync($sectorIds);
+            } else {
+                $model->sectors()->detach();
+            }
+
+            // Привязываем акции
+            $specialIds = [];
+            $specialData = array_get($input, 'SpecialOffer', []);
+            foreach ($specialData as $item) {
+                if ($item['checked']==1) {
+                    $specialIds[] = $item['id'];
+                }
+            }
+            if ($specialIds) {
+                $model->specialOffers()->sync($specialIds);
+            } else {
+                $model->specialOffers()->detach();
             }
 
             // Привязываем фильтры
@@ -96,6 +127,19 @@ class ProductRepository extends BaseRepository
         $ret = [];
         foreach ($models as $model) {
             $ret[$model->id] = $model->getNodeValue('title', 'ru');
+        }
+
+        return $ret;
+    }
+
+    public function getFiltersStat()
+    {
+        $stat = DB::table('filter_product')
+            ->selectRaw('filter_product.filter_id, count(filter_product.product_id) as product_count')
+            ->groupBy('filter_product.filter_id')->get();
+        $ret = [];
+        foreach ($stat as $row) {
+            $ret[$row->filter_id] = $row->product_count;
         }
 
         return $ret;

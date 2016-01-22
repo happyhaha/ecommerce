@@ -8,17 +8,29 @@ use Response;
 use Illuminate\Http\Request;
 use Ibec\Ecommerce\ProductRepository;
 use Ibec\Ecommerce\ProductCategoryRepository;
+use Ibec\Ecommerce\ProductSectorRepository;
+use Ibec\Ecommerce\SpecialOfferRepository;
 
 class ProductsController extends BaseController
 {
     protected $codename = 'products';
 
     protected $categoryRepository;
+    protected $sectorRepository;
+    protected $specialRepository;
 
-    public function __construct(Document $document, Guard $auth, ProductRepository $repository, ProductCategoryRepository $catRepository)
-    {
+    public function __construct(
+        Document $document,
+        Guard $auth,
+        ProductRepository $repository,
+        ProductCategoryRepository $catRepository,
+        ProductSectorRepository $sectorRepository,
+        SpecialOfferRepository $specialRepository
+    ) {
         $this->repository = $repository;
         $this->categoryRepository = $catRepository;
+        $this->sectorRepository = $sectorRepository;
+        $this->specialRepository = $specialRepository;
 
         parent::__construct($document, $auth);
     }
@@ -27,36 +39,60 @@ class ProductsController extends BaseController
     {
         $ret = [];
         $ret['categories'] = [];
-        $categoriesBuilder = $this->categoryRepository->getPlainTree();
-        $categories = $categoriesBuilder->with(['filters'])->get();
 
         $existingCats = [];
         $filterValues = [];
+        $existingSectors = [];
+        $existingSpecials = [];
 
         if ($request->get('id')) {
+            // 2 запроса в БД
             $model = $this->repository->findByPk($request->get('id'));
 
-            // Собираем выбранные категории
+            // 2 запроса в БД: Собираем выбранные категории
             $cats = $model->categories;
             foreach ($cats as $cat) {
                 $existingCats[$cat->id] = $cat;
             }
 
-            // Собираем выбранные, заполненные фильтры для данного товара
+            // 2 запроса в БД: Собираем выбранные, заполненные фильтры для данного товара
             $filters = $model->filters;
             foreach ($filters as $filter) {
                 $filterValues[(string)$filter->filter_group_id] = $filter->getNodeValue('title', 'ru');
             }
-
             if ($filterValues) {
                 $ret['filter_values'] = $filterValues;
             }
+
+            $productSectors = $model->sectors;
+            foreach ($productSectors as $sector) {
+                $existingSectors[$sector->id] = $sector;
+            }
+
+            $productSpecials = $model->specialOffers;
+            foreach ($productSpecials as $special) {
+                $existingSpecials[$special->id] = $special;
+            }
         }
+
+        $categoriesBuilder = $this->categoryRepository->getPlainTree();
+
+        // 4 запроса в БД: 2 запроса за категориями, 2 за группами фильтров;
+        $categories = $categoriesBuilder->with(['filters', 'filters.filters'])->get();
+        // 1 запрос в БД
+        $filtersStat = $this->repository->getFiltersStat();
+
+        $categoryGroupsList = [];
 
         foreach ($categories as $cat) {
             $filtersArr = [];
             // Достаем группы фильтров присвоенные к данной категории
-            $filterGroups = $cat->parentFiltersAndSelf();
+            // $filterGroups = $cat->parentFiltersAndSelf();
+            $filterGroups = $cat->filters;
+            if ($cat->parent_id && $categoryGroupsList[$cat->parent_id]) {
+                $filterGroups = $categoryGroupsList[$cat->parent_id]->merge($filterGroups);
+            }
+            $categoryGroupsList[$cat->id] = $filterGroups;
             foreach ($filterGroups as $filterGroup) {
                 $groupArr = [
                     'group_id' => (string)$filterGroup->id,
@@ -67,29 +103,48 @@ class ProductsController extends BaseController
                 ];
 
                 // Собираем возможные варианты значений для данной группы фильтров
-                $groupItems = $filterGroup->filters()->with(['nodes'])->itemsCount()->get();
-                foreach ($groupItems as $filterItem) {
+                foreach ($filterGroup->filters as $filterItem) {
+                    $productCount = (isset($filtersStat[$filterItem->id])?$filtersStat[$filterItem->id]:0);
                     $groupArr['available_values'][] = [
                         'id' => $filterItem->id,
-                        'full_title' => $filterItem->getNodeValue('title', 'ru'). ' ( '.(int)$filterItem->product_count.' )',
+                        'full_title' => $filterItem->getNodeValue('title', 'ru'). ' ( '.(int)$productCount.' )',
                         'title' => $filterItem->getNodeValue('title', 'ru'),
-                        'count' => $filterItem->product_count,
+                        'count' => $productCount,
                     ];
                 }
 
-
                 $filtersArr[] = $groupArr;
             }
-            $categoryTitle = str_repeat('', $cat->depth);
-            $categoryTitle .= (string)$cat->getNodeValue('title', 'ru');
+            $categoryTitle = (string)$cat->getNodeValue('title', 'ru');
             $arr = [
                 'id' => (string)$cat->id,
+                'parent_id' => (string)$cat->parent_id,
                 'title' => $categoryTitle,
                 'depth' => (int)$cat->depth,
                 'filters' => $filtersArr,
                 'checked' => (isset($existingCats[$cat->id])?'1':'0')
             ];
             $ret['categories'][] = $arr;
+        }
+
+        $sectors = $this->sectorRepository->all(['limit'=>1000]);
+        $ret['sectors'] = [];
+        foreach ($sectors as $sector) {
+            $ret['sectors'][] = [
+                'id' => (string)$sector->id,
+                'title' => (string)$sector->getNodeValue('title', 'ru'),
+                'checked' => (isset($existingSectors[$sector->id])?'1':'0')
+            ];
+        }
+
+        $specials = $this->specialRepository->all(['limit'=>1000]);
+        $ret['specials'] = [];
+        foreach ($specials as $special) {
+            $ret['specials'][] = [
+                'id' => (string)$special->id,
+                'title' => (string)$special->getNodeValue('title', 'ru'),
+                'checked' => (isset($existingSpecials[$special->id])?'1':'0')
+            ];
         }
 
         return $ret;

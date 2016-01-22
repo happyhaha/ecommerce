@@ -14,8 +14,8 @@
         'data-ng-init' => 'Prod.actions.init('.$model->id.')',
     ]) !!}
     @if($errors)
-        <div>
-            <ul>
+        <div class="text-danger">
+            <ul style="margin-top: 10px;">
             @foreach($errors->all('<li>:message</li>') as $error)
                     {!! $error !!}
                 @endforeach
@@ -50,6 +50,11 @@
                         Характеристики
                     </a>
                 </li>
+                <li class="">
+                    <a href="#tab-sectors-info" role="tab" data-toggle="tab">
+                        Отрасли и Акции
+                    </a>
+                </li>
             </ul>
             <div class="form-horizontal">
                 <div class="tab-content">
@@ -69,6 +74,12 @@
                     ])
 
                     @include('ecommerce::'.$codename.'/_form_categories',[
+                        'repository' => $repository,
+                        'model' => $model,
+                        'codename' => $codename,
+                    ])
+
+                    @include('ecommerce::'.$codename.'/_form_sectors',[
                         'repository' => $repository,
                         'model' => $model,
                         'codename' => $codename,

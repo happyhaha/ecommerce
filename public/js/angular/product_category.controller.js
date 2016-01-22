@@ -11,9 +11,9 @@
             filters: [],
             parent_filters: [],
             filter_types: [
-              {id: '1', title: 'Галочки'},
-              {id: '2', title: 'Дропдаун'},
-              {id: '3', title: 'Ползунок'}
+                {id: '1', title: 'Галочки'},
+                {id: '2', title: 'Дропдаун'},
+                {id: '3', title: 'Ползунок'}
             ]
         };
 

@@ -5,11 +5,42 @@ namespace Ibec\Ecommerce\Database;
 use Baum\Node as BaseModel;
 use Ibec\Translation\HasNode;
 use Ibec\Translation\Nodeable;
+use Ibec\Ecommerce\Database\SpecialOffer;
 
-class ProductCategory extends BaseModel implements Nodeable
+use Cviebrock\EloquentSluggable\SluggableInterface;
+use Cviebrock\EloquentSluggable\SluggableTrait;
+
+class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
 {
     use HasNode;
     use MiscTrait;
+    use SluggableTrait;
+
+    protected $sluggable = [
+        'build_from' => 'node.title',
+        'save_to'    => 'slug',
+//        'max_length'      => null,
+//        'method'          => null,
+        'separator'       => '-',
+        'unique'          => true,
+//        'include_trashed' => false,
+        'on_update'       => true,
+//        'reserved'        => null,
+    ];
+
+    protected function getRules()
+    {
+        return [
+            'ru.title' => 'required',
+        ];
+    }
+
+    protected function getRulesMessages()
+    {
+        return [
+            'ru.title.required' => 'Заголовок на русском обязательное поле к заполнению',
+        ];
+    }
 
     /**
      * The database table used by the model.
@@ -23,7 +54,10 @@ class ProductCategory extends BaseModel implements Nodeable
      *
      * @var array
      */
-    protected $fillable = ['parent_id'];
+    protected $fillable = [
+        'parent_id',
+        'slug'
+    ];
 
     /**
      * FQ Node class name
@@ -37,6 +71,16 @@ class ProductCategory extends BaseModel implements Nodeable
     public function filters()
     {
         return $this->hasMany('Ibec\Ecommerce\Database\FilterGroup');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(
+            'Ibec\Ecommerce\Database\Product',
+            'product_product_category',
+            'product_category_id',
+            'product_id'
+        );
     }
 
     public function setParentIdAttribute($value)

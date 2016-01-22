@@ -45,7 +45,10 @@ class EcommerceServiceProvider extends ServiceProvider
             app('admin_menu')->addItem($codename, admin_route($codename.'.products.index'), 'Товары');
             app('admin_menu')->addItem($codename, admin_route($codename.'.product-categories.index'), 'Категории');
             app('admin_menu')->addItem($codename, admin_route($codename.'.product-brands.index'), 'Бренды');
-            app('admin_menu')->addItem($codename, admin_route($codename.'.filters.index'), 'Фильтры');
+            app('admin_menu')->addItem($codename, admin_route($codename.'.product-sectors.index'), 'Отрасли');
+            app('admin_menu')->addItem($codename, admin_route($codename.'.special-offers.index'), 'Акции');
+            app('admin_menu')->addItem($codename, admin_route($codename.'.banners.index'), 'Баннеры');
+            app('admin_menu')->addItem($codename, admin_route($codename.'.orders.index'), 'Заказы');
             // app('admin_menu')->addItem('ecommerce', admin_route($codename.'.items'), 'Товары');
         }
     }

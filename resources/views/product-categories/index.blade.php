@@ -2,7 +2,7 @@
 
 @section('title-right')
     {!! Html::link(
-        admin_route('ecommerce.product-categories.create'),
+        admin_route('ecommerce.'.$codename.'.create'),
         trans('admin::default.actions.create'),
         ['class' => 'btn btn-success'])
     !!}
@@ -23,7 +23,7 @@
                                 {{ trans('ecommerce::default.actions.delete_selected') }}
                             </option>
                         </select>
-                        <button data-action="batchAction" data-url="{{ '' }}" class="btn btn-sm btn-default apply_bulk">
+                        <button data-action="batchAction" data-url="{{ url('admin/ecommerce/'.$codename.'/batch') }}" class="btn btn-sm btn-default apply_bulk">
                             {{ trans('ecommerce::default.actions.apply') }}
                         </button>
                     </div>

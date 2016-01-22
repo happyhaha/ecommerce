@@ -15,8 +15,8 @@ class CreateProductProductCategoryPivotTable extends Migration
     {
         Schema::create('product_product_category', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id')->unsigned();
-            $table->integer('product_category_id')->unsigned();
+            $table->integer('product_id')->unsigned()->nullable();
+            $table->integer('product_category_id')->unsigned()->nullable();
             $table->foreign('product_id')
                     ->references('id')
                     ->on('products')

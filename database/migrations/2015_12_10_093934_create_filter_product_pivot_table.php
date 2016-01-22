@@ -15,8 +15,8 @@ class CreateFilterProductPivotTable extends Migration
     {
         Schema::create('filter_product', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id')->unsigned();
-            $table->integer('filter_id')->unsigned();
+            $table->integer('product_id')->unsigned()->nullable();
+            $table->integer('filter_id')->unsigned()->nullable();
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')

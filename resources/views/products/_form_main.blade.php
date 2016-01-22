@@ -4,10 +4,6 @@
         'input' => Form::select('Product[product_brand_id]', $repository->getBrandList(), $model->product_brand_id, ['class' => 'form-control']),
     ])
     @include('ecommerce::_form/group',[
-        'label' => trans('ecommerce::default.'.$codename.'.fields.slug'),
-        'input' => Form::text('Product[slug]', $model->slug, ['class' => 'form-control']),
-    ])
-    @include('ecommerce::_form/group',[
         'label' => trans('ecommerce::default.'.$codename.'.fields.article_number'),
         'input' => Form::text('Product[article_number]', $model->article_number, ['class' => 'form-control']),
     ])

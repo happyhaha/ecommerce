@@ -15,11 +15,15 @@ class CreateFiltersTable extends Migration
     {
         Schema::create('filters', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('filter_group_id');
+            $table->integer('filter_group_id')->unsigned()->nullable();
             $table->tinyInteger('sort_order')->unsigned()->default(0);
             $table->timestamps();
 
-            $table->index(['filter_group_id']);
+            $table->foreign('filter_group_id')
+                ->references('id')
+                ->on('filter_group')
+                ->onUpdate('CASCADE')
+                ->onDelete('SET NULL');
         });
     }
 
@@ -30,6 +34,9 @@ class CreateFiltersTable extends Migration
      */
     public function down()
     {
+        Schema::table('filters', function (Blueprint $table) {
+            $table->dropForeign('filters_filter_group_id_foreign');
+        });
         Schema::drop('filters');
     }
 }

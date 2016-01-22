@@ -11,7 +11,7 @@
       if (input) {
         input = input.toString();
         return input.replace(/\B(?=(\d{3})+(?!\d))/g,' ');
-      }else{
+      } else {
         return 0;
       }
     };

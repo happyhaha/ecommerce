@@ -38,27 +38,27 @@
                         <div role="tabpanel" class="tab-pane{{ ($localeIndex==0) ? ' active' : '' }}" id="lang-{{ $locale }}">
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.product-brands.fields.title'),
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.title'),
                                 'input' => Form::text('ProductBrand['.$locale.'][title]', $model->getNodeValue('title',$locale), ['class' => 'form-control']),
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.product-brands.fields.content'),
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.content'),
                                 'input' => Form::textarea('ProductBrand['.$locale.'][content]', $model->getNodeValue('content',$locale), ['class' => 'form-control', 'ui-jq' => 'ckeditor', 'ui-options' => json_encode($ckeditorBasic)]),
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.product-brands.fields.seo_title'),
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.seo_title'),
                                 'input' => Form::text('ProductBrand['.$locale.'][seo_title]', $model->getNodeValue('seo_title',$locale), ['class' => 'form-control']),
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.product-brands.fields.seo_description'),
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.seo_description'),
                                 'input' => Form::text('ProductBrand['.$locale.'][seo_description]', $model->getNodeValue('seo_description',$locale), ['class' => 'form-control']),
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.product-brands.fields.seo_keywords'),
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.seo_keywords'),
                                 'input' => Form::text('ProductBrand['.$locale.'][seo_keywords]', $model->getNodeValue('seo_keywords',$locale), ['class' => 'form-control']),
                             ])
 
@@ -71,7 +71,7 @@
                                 ['class' => 'btn btn-primary']
                             ) !!}
                             {!! Html::link(
-                                admin_route('ecommerce.product-brands.index'),
+                                admin_route('ecommerce.'.$codename.'.index'),
                                 trans('admin::default.actions.back'),
                                 ['class' => 'btn btn-sm btn-default']
                             ) !!}

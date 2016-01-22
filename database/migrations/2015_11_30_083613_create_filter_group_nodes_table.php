@@ -14,7 +14,7 @@ class CreateFilterGroupNodesTable extends Migration
     public function up()
     {
         Schema::create('filter_group_nodes', function (Blueprint $table) {
-            $table->unsignedInteger('filter_group_id');
+            $table->unsignedInteger('filter_group_id')->nullable();
             $table->char('language_id', 2);
             $table->string('title', 60);
 

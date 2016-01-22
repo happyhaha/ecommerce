@@ -46,7 +46,6 @@ class ProductCategoryNode extends Model
     protected $fillable = [
         'title',
         'language_id',
-        'slug',
         'content',
         'seo_description',
         'seo_title',

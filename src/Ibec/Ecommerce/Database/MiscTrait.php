@@ -6,21 +6,30 @@ use Validator;
 
 trait MiscTrait
 {
-    protected $rules = [];
     protected $errors;
     public $hasErrors = false;
+
+    protected function getRules()
+    {
+        return [];
+    }
+
+    protected function getRulesMessages()
+    {
+        return [];
+    }
 
     public function validate($data)
     {
         $this->hasErrors = false;
 
         // make a new validator object
-        $v = Validator::make($data, $this->rules);
+        $v = Validator::make($data, $this->getRules(), $this->getRulesMessages());
 
         // check for failure
         if ($v->fails()) {
             // set errors and return false
-            $this->errors = $v->errors;
+            $this->errors = $v->errors();
             $this->hasErrors = true;
             return false;
         }

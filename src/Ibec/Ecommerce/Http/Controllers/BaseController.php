@@ -4,6 +4,9 @@ namespace Ibec\Ecommerce\Http\Controllers;
 
 use Ibec\Admin\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Input;
+use Ibec\Media\File;
+use Ibec\Media\Image;
 
 abstract class BaseController extends Controller
 {
@@ -95,6 +98,7 @@ abstract class BaseController extends Controller
         $model = $this->repository->getNew();
 
         $data = $request->all();
+
         if ($this->repository->save($model, $data)) {
             return redirect(admin_route('ecommerce.'.$this->codename.'.index'));
         } else {
@@ -126,12 +130,18 @@ abstract class BaseController extends Controller
             .trans('ecommerce::default.'.$this->codename.'.edit')
         );
 
-        return view('ecommerce::'.$this->codename.'.form', [
+        $hasImages = $this->repository->hasImages($model);
+        $viewParams = [
             'model' => $model,
             'target' => 'ecommerce.'.$this->codename.'.update',
             'codename' => $this->codename,
             'repository' => $this->repository,
-        ]);
+        ];
+        if ($hasImages) {
+            $mediaInfo = $this->getImageInfo($model);
+            $viewParams = array_merge($viewParams, $mediaInfo);
+        }
+        return view('ecommerce::'.$this->codename.'.form', $viewParams);
     }
 
     /**
@@ -146,6 +156,7 @@ abstract class BaseController extends Controller
     {
         $model = $this->repository->findByPk($id);
         $data = $request->all();
+
         if ($this->repository->save($model, $data)) {
             return redirect(admin_route('ecommerce.'.$this->codename.'.index'));
         } else {
@@ -165,4 +176,50 @@ abstract class BaseController extends Controller
         $this->repository->delete($id);
         return redirect(admin_route('ecommerce.'.$this->codename.'.index'));
     }
+
+    public function deleteBatch(Request $request, $action = null)
+    {
+
+        $ids = $request->input('selected', []);
+        if ($ids) {
+            $items = $this->repository->query()->whereIn('id', $ids)->get();
+            //foreach ($items as $item) {
+                //$item->images()->detach();
+                //$item->tags()->detach();
+                //$item->files()->detach();
+            //}
+            $this->repository->delete($ids);
+        }
+    }
+
+    protected function getImageInfo($model)
+    {
+//        $files = $model->files->keyBy('pivot.field_slug');
+        $files = [];
+
+        $image = $model->images()->withPivot('title', 'alt', 'cropped_coords')->first();
+        $cropped_coords = $image ?$image->pivot->cropped_coords :null;
+
+        if (Input::old()) {
+//            $fileInput = array_filter(Input::old('fields.files', []), 'strlen');
+//            if ($fileInput) {
+//                $files = [];
+//                $collection = File::whereIn('id', $fileInput)->get()->keyBy('id');
+//                foreach ($fileInput as $field_slug => $id) {
+//                    $files [$field_slug] = $collection [$id];
+//                }
+//                $files = collect($files);
+//            }
+
+            $image = Image::where('id', Input::old('image_id'))->first();
+            $cropped_coords = Input::old('cropped_coords');
+        }
+
+        return [
+            'image' => $image,
+            'files' => $files,
+            'cropped_coords' => $cropped_coords
+        ];
+    }
+
 }

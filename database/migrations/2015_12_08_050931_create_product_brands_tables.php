@@ -18,7 +18,7 @@ class CreateProductBrandsTables extends Migration
         });
 
         Schema::create('product_brand_nodes', function (Blueprint $table) {
-            $table->unsignedInteger('product_brand_id');
+            $table->unsignedInteger('product_brand_id')->nullable();
             $table->char('language_id', 2);
             $table->string('title');
             $table->longText('content')->nullable();

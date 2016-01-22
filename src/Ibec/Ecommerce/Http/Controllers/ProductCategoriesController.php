@@ -50,6 +50,7 @@ class ProductCategoriesController extends BaseController
                     'id' => (string)$filter->id,
                     'type' => (string)$filter->type,
                     'postfix' => (string)$filter->postfix,
+                    'status' => (string)($filter->status?$filter->status:0),
                 ];
                 foreach (config('app.locales') as $locale) {
                     $node = array_get($nodes, $locale, null);

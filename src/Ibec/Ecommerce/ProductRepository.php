@@ -37,6 +37,10 @@ class ProductRepository extends BaseRepository
             $model->save();
             $this->saveNodes($model, 'product_id', $mainData);
 
+            if ($this->hasImages($model)) {
+                $this->saveImage($model, $input);
+            }
+
             // Привязываем категории
             $categoryIds = [];
             $catsData = array_get($input, 'ProductCategories', []);

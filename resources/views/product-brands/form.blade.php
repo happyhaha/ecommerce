@@ -1,9 +1,6 @@
 @extends('admin::base')
 
 @section('main-before')
-@endsection
-
-@section('content')
     {!! Form::model($model, [
         'method' => ($model->exists) ? 'PUT' : 'POST',
         'route' => [
@@ -11,6 +8,33 @@
             ($model->exists) ? $model->id : ''
         ],
     ]) !!}
+@endsection
+
+@section('sidebar')
+    <div class="wrapper">
+
+        @include('ecommerce::_form/image',[
+            'image' => (isset($image)?$image:null),
+            'cropped_coords' => (isset($cropped_coords)?$cropped_coords:null),
+            'model' => $model
+        ])
+
+        <div class="">
+            <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
+            {!! Form::submit(
+                trans('admin::default.actions.save'),
+                ['class' => 'btn btn-block btn-primary']
+            ) !!}
+            {!! Html::link(
+                admin_route('ecommerce.'.$codename.'.index'),
+                trans('admin::default.actions.back'),
+                ['class' => 'btn btn-sm btn-block btn-default']
+            ) !!}
+        </div>
+    </div>
+@endsection
+
+@section('content')
     @if($errors)
         <div>
             <ul>
@@ -82,5 +106,12 @@
         </div>
 
     </div>
+@endsection
+
+@section('main-after')
     {!! Form::close() !!}
+@endsection
+
+@section('scripts')
+    @include('media::manager.modal',['image_ids'=>[''],'params' => ['multiple' => 0]])
 @endsection

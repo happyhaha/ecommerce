@@ -152,15 +152,19 @@ abstract class BaseRepository
      */
     protected function saveImage($model, $data = [])
     {
-        $image_id = array_get($data, 'image_id', null);
-        if ($image_id) {
-            $model->images()->sync([
-                $image_id => [
+        $mediaItems = array_get($data, 'Media', []);
+        if ($mediaItems) {
+
+            $rows = [];
+            foreach ($mediaItems as $data) {
+                $rows[$data['image_id']] = [
                     'title' => array_get($data, 'image_title'),
                     'alt' => array_get($data, 'image_alt'),
                     'cropped_coords' => array_get($data, 'cropped_coords', null)
-                ]
-            ]);
+                ];
+            }
+
+            $model->images()->sync($rows);
         } else {
             $model->images()->detach();
         }

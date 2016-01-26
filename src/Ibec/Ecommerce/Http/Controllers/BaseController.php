@@ -194,32 +194,31 @@ abstract class BaseController extends Controller
 
     protected function getImageInfo($model)
     {
-//        $files = $model->files->keyBy('pivot.field_slug');
-        $files = [];
-
-        $image = $model->images()->withPivot('title', 'alt', 'cropped_coords')->first();
-        $cropped_coords = $image ?$image->pivot->cropped_coords :null;
-
-        if (Input::old()) {
-//            $fileInput = array_filter(Input::old('fields.files', []), 'strlen');
-//            if ($fileInput) {
-//                $files = [];
-//                $collection = File::whereIn('id', $fileInput)->get()->keyBy('id');
-//                foreach ($fileInput as $field_slug => $id) {
-//                    $files [$field_slug] = $collection [$id];
-//                }
-//                $files = collect($files);
+        // $files = $model->files->keyBy('pivot.field_slug');
+//        $files = [];
+//        $cropped_coords = $image ?$image->pivot->cropped_coords :null;
+//            if (Input::old()) {
+    //            $fileInput = array_filter(Input::old('fields.files', []), 'strlen');
+    //            if ($fileInput) {
+    //                $files = [];
+    //                $collection = File::whereIn('id', $fileInput)->get()->keyBy('id');
+    //                foreach ($fileInput as $field_slug => $id) {
+    //                    $files [$field_slug] = $collection [$id];
+    //                }
+    //                $files = collect($files);
+    //            }
+//                $image = Image::where('id', Input::old('image_id'))->first();
+//                $cropped_coords = Input::old('cropped_coords');
 //            }
+//        return [
+//            'image' => $image,
+//            'files' => $files,
+//            'cropped_coords' => $cropped_coords
+//        ];
 
-            $image = Image::where('id', Input::old('image_id'))->first();
-            $cropped_coords = Input::old('cropped_coords');
-        }
+        $images = $model->images()->withPivot('title', 'alt', 'cropped_coords')->get();
+        return ['images' => $images];
 
-        return [
-            'image' => $image,
-            'files' => $files,
-            'cropped_coords' => $cropped_coords
-        ];
     }
 
 }

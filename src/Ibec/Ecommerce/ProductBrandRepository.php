@@ -23,14 +23,18 @@ class ProductBrandRepository extends BaseRepository
         $this->modelName = get_class($model);
     }
 
-    public function save(&$model, $input)
+    public function save(&$model, $mainData)
     {
-        $input = array_get($input, 'ProductBrand', []);
+        $input = array_get($mainData, 'ProductBrand', []);
         if ($model->validate($input)) {
 
             // $model->fill($input);
             $model->save();
             $this->saveNodes($model, 'product_brand_id', $input);
+
+            if ($this->hasImages($model)) {
+                $this->saveImage($model, $mainData);
+            }
 
             return true;
         }

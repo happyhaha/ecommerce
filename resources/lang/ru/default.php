@@ -184,6 +184,9 @@ return [
         'apply' => 'Применить',
         'delete_selected' => 'Удалить выбранные',
         'create' => 'Создать',
+        'image_delete' => 'Удалить',
+        'image_add' => 'Добавить файл',
+        'image_change' => 'Изменить'
     ],
 
 ];

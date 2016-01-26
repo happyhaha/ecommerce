@@ -20,3 +20,5 @@ $router->resource('banners', 'BannersController');
 
 $router->get('orders/get-info', 'OrdersController@getInfo');
 $router->resource('orders', 'OrdersController');
+
+$router->get('images', 'ImagesController@index');

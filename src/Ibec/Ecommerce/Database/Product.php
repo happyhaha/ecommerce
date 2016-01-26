@@ -5,6 +5,8 @@ namespace Ibec\Ecommerce\Database;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Ibec\Translation\HasNode;
 use Ibec\Translation\Nodeable;
+use Ibec\Media\HasImage;
+use Ibec\Media\HasFile;
 
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
@@ -14,6 +16,7 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
     use HasNode;
     use MiscTrait;
     use SluggableTrait;
+    use HasImage, HasFile;
 
     protected $sluggable = [
         'build_from' => 'node.title',

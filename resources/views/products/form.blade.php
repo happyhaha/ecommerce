@@ -1,9 +1,6 @@
 @extends('admin::base')
 
 @section('main-before')
-@endsection
-
-@section('content')
     {!! Form::model($model, [
         'method' => ($model->exists) ? 'PUT' : 'POST',
         'route' => [
@@ -13,6 +10,35 @@
         'data-ng-controller' => 'ProductCtrl as Prod',
         'data-ng-init' => 'Prod.actions.init('.$model->id.')',
     ]) !!}
+@endsection
+
+@section('sidebar')
+    <div class="wrapper">
+
+        @include('ecommerce::_form/images',[
+            'images' => (isset($images)?$images:null),
+            'multiple' => 1,
+            'model' => $model
+        ])
+
+        <div class="">
+            <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
+            {!! Form::submit(
+                trans('admin::default.actions.save'),
+                ['class' => 'btn btn-block btn-primary']
+            ) !!}
+            {!! Html::link(
+                admin_route('ecommerce.'.$codename.'.index'),
+                trans('admin::default.actions.back'),
+                ['class' => 'btn btn-sm btn-block btn-default']
+            ) !!}
+        </div>
+    </div>
+@endsection
+
+
+@section('content')
+
     @if($errors)
         <div class="text-danger">
             <ul style="margin-top: 10px;">
@@ -103,6 +129,9 @@
         </div>
 
     </div>
+@endsection
+
+@section('main-after')
     {!! Form::close() !!}
 @endsection
 
@@ -110,4 +139,6 @@
     <script src="/vendor/ecommerce/js/angular/helpers.js"></script>
     <script src="/vendor/ecommerce/js/angular/product.controller.js"></script>
     <script src="/vendor/ecommerce/js/angular/product.service.js"></script>
+
+    @include('ecommerce::_form.media_modal',['image_ids'=>[''],'params' => ['multiple' => 0]])
 @endsection

@@ -18,7 +18,12 @@ $router->resource('products', 'ProductsController');
 $router->resource('special-offers', 'SpecialOffersController');
 $router->resource('banners', 'BannersController');
 
+
 $router->get('orders/get-info', 'OrdersController@getInfo');
 $router->resource('orders', 'OrdersController');
+
+$router->get('sliders/get-info', 'SlidersController@getInfo');
+$router->get('sliders/get-rows', 'SlidersController@getModelItems');
+$router->resource('sliders', 'SlidersController');
 
 $router->get('images', 'ImagesController@index');

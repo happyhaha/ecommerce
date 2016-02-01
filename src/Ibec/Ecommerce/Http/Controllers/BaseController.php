@@ -216,7 +216,7 @@ abstract class BaseController extends Controller
 //            'cropped_coords' => $cropped_coords
 //        ];
 
-        $images = $model->images()->withPivot('title', 'alt', 'cropped_coords')->get();
+        $images = $model->images()->withPivot('title', 'alt', 'cropped_coords', 'url', 'subtype')->get();
         return ['images' => $images];
 
     }

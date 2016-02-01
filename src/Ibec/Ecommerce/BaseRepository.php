@@ -160,7 +160,9 @@ abstract class BaseRepository
                 $rows[$data['image_id']] = [
                     'title' => array_get($data, 'image_title'),
                     'alt' => array_get($data, 'image_alt'),
-                    'cropped_coords' => array_get($data, 'cropped_coords', null)
+                    'cropped_coords' => array_get($data, 'cropped_coords', null),
+                    'url' => array_get($data, 'url', null),
+                    'subtype' => array_get($data, 'subtype', null),
                 ];
             }
 

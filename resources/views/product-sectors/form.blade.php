@@ -48,6 +48,12 @@
                             ])
 
                             @include('ecommerce::_form/group',[
+                                'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
+                                'input' => Form::hidden('ProductSector[status]',0)
+                                .Form::checkbox('ProductSector[status]', 1, $model->status?true:false),
+                            ])
+
+                            @include('ecommerce::_form/group',[
                                 'label' => trans('ecommerce::default.'.$codename.'.fields.seo_title'),
                                 'input' => Form::text('ProductSector['.$locale.'][seo_title]', $model->getNodeValue('seo_title',$locale), ['class' => 'form-control']),
                             ])

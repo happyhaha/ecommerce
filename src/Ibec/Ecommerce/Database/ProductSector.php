@@ -6,10 +6,22 @@ use Illuminate\Database\Eloquent\Model as BaseModel;
 use Ibec\Translation\HasNode;
 use Ibec\Translation\Nodeable;
 
-class ProductSector extends BaseModel implements Nodeable
+use Cviebrock\EloquentSluggable\SluggableInterface;
+use Cviebrock\EloquentSluggable\SluggableTrait;
+
+class ProductSector extends BaseModel implements Nodeable, SluggableInterface
 {
     use HasNode;
     use MiscTrait;
+    use SluggableTrait;
+
+    protected $sluggable = [
+        'build_from' => 'node.title',
+        'save_to'    => 'slug',
+        'separator'       => '-',
+        'unique'          => true,
+        'on_update'       => true,
+    ];
 
     /**
      * The database table used by the model.
@@ -23,7 +35,17 @@ class ProductSector extends BaseModel implements Nodeable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'status',
+        'slug'
+    ];
+
+    protected function getRules()
+    {
+        return [
+            'ru.title' => 'required',
+        ];
+    }
 
     /**
      * FQ Node class name

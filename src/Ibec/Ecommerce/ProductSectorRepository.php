@@ -27,8 +27,10 @@ class ProductSectorRepository extends BaseRepository
     {
         $mainData = array_get($input, 'ProductSector', []);
         if ($model->validate($mainData)) {
-
-            // $model->fill($mainData);
+            $model->fill($mainData);
+            if (!$model->exists) {
+                $model->slug = $model->createSlug($mainData['ru']['title']);
+            }
             $model->save();
             $this->saveNodes($model, 'product_sector_id', $mainData);
 

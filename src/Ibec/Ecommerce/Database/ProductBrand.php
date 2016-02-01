@@ -7,10 +7,21 @@ use Ibec\Translation\HasNode;
 use Ibec\Translation\Nodeable;
 use Ibec\Media\HasImage;
 use Ibec\Media\HasFile;
+use Cviebrock\EloquentSluggable\SluggableInterface;
+use Cviebrock\EloquentSluggable\SluggableTrait;
 
-class ProductBrand extends BaseModel implements Nodeable
+class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
 {
     use HasNode, MiscTrait, HasImage, HasFile;
+    use SluggableTrait;
+
+    protected $sluggable = [
+        'build_from' => 'node.title',
+        'save_to'    => 'slug',
+        'separator'       => '-',
+        'unique'          => true,
+        'on_update'       => true,
+    ];
 
     /**
      * The database table used by the model.
@@ -24,7 +35,17 @@ class ProductBrand extends BaseModel implements Nodeable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'status',
+        'slug'
+    ];
+
+    protected function getRules()
+    {
+        return [
+            'ru.title' => 'required',
+        ];
+    }
 
     /**
      * FQ Node class name

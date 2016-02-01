@@ -22,7 +22,16 @@ class ImagesController extends Controller
         }
 
         $ajax = true;
+        $urlField = false;
+        if ($request->get('urlField')) {
+            $urlField = true;
+        }
 
-        return view('ecommerce::_form.images', compact('images', 'ajax'));
+        $type = 'image';
+        if ($request->get('type')) {
+            $type = $request->get('type');
+        }
+
+        return view('ecommerce::_form.images', compact('images', 'ajax', 'urlField', 'type'));
     }
 }

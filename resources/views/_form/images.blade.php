@@ -1,5 +1,10 @@
 @if (!isset($ajax) || !$ajax)
-<div class="media-files-widget" data-multiple="{{isset($multiple)?$multiple:0}}">
+<div class="media-files-widget"
+     data-multiple="{{isset($multiple)?$multiple:0}}"
+     @if(isset($urlField) && $urlField)
+     data-url-field="true"
+     @endif
+     data-type="{{isset($type)?$type:'image'}}">
 @endif
 
 @if (!isset($ajax) || !$ajax)
@@ -31,6 +36,13 @@
             @if ($image)
                 <label class="control-label image_alt">{{ trans('content::default.posts.image_alt') }}</label>
                 {!! Form::text('Media['.time().'-'.$index.'][image_alt]', !Input::old() ? ($image->pivot?$image->pivot->alt:'') : ''  , ['class' => 'form-control image_alt']) !!}
+            @endif
+            @if ($image && isset($type) && $type)
+                {!! Form::hidden('Media['.time().'-'.$index.'][subtype]', $type) !!}
+            @endif
+            @if ($image && isset($urlField) && $urlField)
+                <label class="control-label image_url">URL</label>
+                {!! Form::text('Media['.time().'-'.$index.'][url]', !Input::old() ? ($image->pivot?$image->pivot->url:'') : ''  , ['class' => 'form-control image_url']) !!}
             @endif
 
             <br>

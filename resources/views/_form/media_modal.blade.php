@@ -49,18 +49,27 @@ if(isset($image->id))
         if (mediaType == 'images' || mediaType == 'videos' || true) {
             // var files = $('#image_upload').val().split(',');
             var files = arr;
+            var widget = triggerButton.parents(mediaWidgetOpts.widget);
 
             // send_data('{{@$url}}', files, path);
+            var queryParams = {
+                items: files
+            };
+            if (widget.data('type')) {
+                queryParams.type = widget.data('type');
+            }
+
+            if (widget.data('urlField')) {
+                queryParams.urlField = widget.data('urlField');
+            }
 
             $.ajax({
                 method: "GET",
                 url: '/{{ config('admin.uri') }}/ecommerce/images',
-                data: {
-                    items: files
-                },
+                data: queryParams,
                 dataType: 'html',
                 success: function (response) {
-                    var widget = triggerButton.parents(mediaWidgetOpts.widget);
+
 
                     // Изменение
                     if (triggerButton.hasClass(mediaWidgetOpts.changeClass)) {

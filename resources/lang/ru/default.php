@@ -47,6 +47,7 @@ return [
             'id' => 'ID',
             'title' => 'Заголовок',
             'content' => 'Описание',
+            'status' => 'Статус',
             'seo_description' => 'SEO Описание',
             'seo_title' => 'SEO Заголовок',
             'seo_keywords' => 'SEO Ключевые слова',
@@ -66,6 +67,7 @@ return [
             'id' => 'ID',
             'title' => 'Заголовок',
             'content' => 'Описание',
+            'status' => 'Статус',
             'seo_description' => 'SEO Описание',
             'seo_title' => 'SEO Заголовок',
             'seo_keywords' => 'SEO Ключевые слова',
@@ -173,6 +175,22 @@ return [
             'comment' => 'Комментарий',
             // 'total_price' => 'Итоговая стоимость',
             'payment_status' => 'Статус оплаты',
+            'status' => 'Статус',
+        ],
+
+        'hints' => [
+        ],
+    ],
+
+    'sliders' => [
+        'index' => 'Слайдеры',
+        'create' => 'Добавление слайдера',
+        'empty' => 'Нет записей',
+        'edit' => 'Редактирование слайдера',
+
+        'fields' => [
+            'model_type' => 'Модуль',
+            'model_id' => 'Запись',
             'status' => 'Статус',
         ],
 

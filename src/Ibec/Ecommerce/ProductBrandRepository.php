@@ -29,7 +29,7 @@ class ProductBrandRepository extends BaseRepository
         if ($model->validate($input)) {
             $model->fill($input);
             if (!$model->exists) {
-                $model->slug = $model->createSlug($mainData['ru']['title']);
+                $model->slug = $model->createSlug($input['ru']['title']);
             }
             $model->save();
 

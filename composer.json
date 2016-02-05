@@ -14,7 +14,7 @@
 	},
 	"autoload": {
 		"classmap": [
-			"database/seeds"
+			
 		],
 		"psr-0": {
 			"Ibec\\Ecommerce": "src/"

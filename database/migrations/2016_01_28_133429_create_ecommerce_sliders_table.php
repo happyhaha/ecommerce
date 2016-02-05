@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSlidersTable extends Migration
+class CreateEcommerceSlidersTable extends Migration
 {
 
     /**
@@ -13,7 +13,7 @@ class CreateSlidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('sliders', function (Blueprint $table) {
+        Schema::create('ecommerce_sliders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('model_id')->unsigned()->nullable();
             $table->string('model_type', 255)->nullable();
@@ -28,7 +28,7 @@ class CreateSlidersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sliders');
+        Schema::drop('ecommerce_sliders');
     }
 
 }

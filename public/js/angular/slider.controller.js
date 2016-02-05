@@ -21,8 +21,9 @@
           data = data.data;
           vm.models.items = data.items;
           vm.models.model_type = data.model_type;
-          vm.models.model_id = data.model_id;
           vm.actions.typeChanged();
+
+          vm.models.model_id = data.model_id;
         });
       },
       typeChanged: function () {

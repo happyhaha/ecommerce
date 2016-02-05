@@ -16,7 +16,7 @@ class Slider extends BaseModel
      *
      * @var string
      */
-    protected $table = 'sliders';
+    protected $table = 'ecommerce_sliders';
 
     /**
      * Mass-assignable attributes

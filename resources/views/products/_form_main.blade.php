@@ -36,9 +36,11 @@
         'input' => Form::hidden('Product[is_hot]',0)
         .Form::checkbox('Product[is_hot]', 1, $model->is_hot?true:false),
     ])
+    <?php /*
     @include('ecommerce::_form/group',[
         'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
         'input' => Form::hidden('Product[status]',0)
         .Form::checkbox('Product[status]', 1, $model->status?true:false),
     ])
+    */?>
 </div>

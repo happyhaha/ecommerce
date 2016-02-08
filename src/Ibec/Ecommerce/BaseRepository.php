@@ -3,6 +3,7 @@
 namespace Ibec\Ecommerce;
 
 use Exception;
+use \Schema;
 
 abstract class BaseRepository
 {
@@ -65,7 +66,11 @@ abstract class BaseRepository
     public function getNew()
     {
         $modelName = $this->modelName;
-        return new $modelName();
+        $obj = new $modelName();
+        if (Schema::hasColumn($obj->getTable(), 'status')) {
+            $obj->status = 1;
+        }
+        return $obj;
     }
 
     /**

@@ -93,7 +93,7 @@ abstract class BaseRepository
      * @param string $relationKey
      * @param array $input
      */
-    protected function saveNodes($model, $relationKey, $input = [])
+    public static function saveNodes($model, $relationKey, $input = [])
     {
         $nodes = [];
         if ($model->exists) {

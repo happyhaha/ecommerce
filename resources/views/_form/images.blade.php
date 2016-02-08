@@ -1,3 +1,9 @@
+<?php
+    if (!isset($blockTitle)) {
+        $blockTitle = 'Изображения';
+    }
+?>
+
 @if (!isset($ajax) || !$ajax)
 <div class="media-files-widget"
      data-multiple="{{isset($multiple)?$multiple:0}}"
@@ -8,6 +14,9 @@
 @endif
 
 @if (!isset($ajax) || !$ajax)
+    <div>
+        <h4>{{$blockTitle}}</h4>
+    </div>
     <div>
         <a style="margin-bottom:20px;" href="#" class="btn add_image btn-primary btn-block btn-addon add_button media-add-item" data-toggle="modal" data-type="images" data-target="#add_image" data-input="some_input">
             <i class="fa fa-plus"></i> &nbsp; {{trans('ecommerce::default.actions.image_add')}}

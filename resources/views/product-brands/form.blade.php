@@ -13,9 +13,16 @@
 @section('sidebar')
     <div class="wrapper">
 
-        @include('ecommerce::_form/image',[
-            'image' => (isset($image)?$image:null),
-            'cropped_coords' => (isset($cropped_coords)?$cropped_coords:null),
+        @include('ecommerce::_form/statuses', [
+            'model' => $model,
+            'name' => 'ProductBrand[status]',
+        ])
+
+        <div class="line line-dashed b-b line-lg"></div>
+
+        @include('ecommerce::_form/images', [
+            'images' => (isset($images)?$images:null),
+            'multiple' => 0,
             'model' => $model
         ])
 
@@ -72,12 +79,6 @@
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
-                                'input' => Form::hidden('ProductBrand[status]',0)
-                                .Form::checkbox('ProductBrand[status]', 1, $model->status?true:false),
-                            ])
-
-                            @include('ecommerce::_form/group',[
                                 'label' => trans('ecommerce::default.'.$codename.'.fields.seo_title'),
                                 'input' => Form::text('ProductBrand['.$locale.'][seo_title]', $model->getNodeValue('seo_title',$locale), ['class' => 'form-control']),
                             ])
@@ -119,5 +120,5 @@
 @endsection
 
 @section('scripts')
-    @include('media::manager.modal',['image_ids'=>[''],'params' => ['multiple' => 0]])
+    @include('ecommerce::_form.media_modal',['image_ids'=>[''],'params' => ['multiple' => 0]])
 @endsection

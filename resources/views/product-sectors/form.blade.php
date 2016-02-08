@@ -1,9 +1,6 @@
 @extends('admin::base')
 
 @section('main-before')
-@endsection
-
-@section('content')
     {!! Form::model($model, [
         'method' => ($model->exists) ? 'PUT' : 'POST',
         'route' => [
@@ -11,6 +8,34 @@
             ($model->exists) ? $model->id : ''
         ],
     ]) !!}
+@endsection
+
+@section('sidebar')
+    <div class="wrapper">
+
+        @include('ecommerce::_form/statuses', [
+            'model' => $model,
+            'name' => 'ProductSector[status]',
+        ])
+
+        <div class="line line-dashed b-b line-lg"></div>
+
+        <div class="">
+            <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
+            {!! Form::submit(
+                trans('admin::default.actions.save'),
+                ['class' => 'btn btn-block btn-primary']
+            ) !!}
+            {!! Html::link(
+                admin_route('ecommerce.'.$codename.'.index'),
+                trans('admin::default.actions.back'),
+                ['class' => 'btn btn-sm btn-block btn-default']
+            ) !!}
+        </div>
+    </div>
+@endsection
+
+@section('content')
     @if($errors)
         <div>
             <ul>
@@ -48,12 +73,6 @@
                             ])
 
                             @include('ecommerce::_form/group',[
-                                'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
-                                'input' => Form::hidden('ProductSector[status]',0)
-                                .Form::checkbox('ProductSector[status]', 1, $model->status?true:false),
-                            ])
-
-                            @include('ecommerce::_form/group',[
                                 'label' => trans('ecommerce::default.'.$codename.'.fields.seo_title'),
                                 'input' => Form::text('ProductSector['.$locale.'][seo_title]', $model->getNodeValue('seo_title',$locale), ['class' => 'form-control']),
                             ])
@@ -86,7 +105,9 @@
                 </div>
             </div>
         </div>
-
     </div>
+@endsection
+
+@section('main-after')
     {!! Form::close() !!}
 @endsection

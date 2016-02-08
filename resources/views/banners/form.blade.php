@@ -11,13 +11,22 @@
 @endsection
 
 @section('sidebar')
-    <div class="wrapper">
+<div class="wrapper">
 
-    @include('ecommerce::_form/image',[
-        'image' => (isset($image)?$image:null),
-        'cropped_coords' => (isset($cropped_coords)?$cropped_coords:null),
+    @include('ecommerce::_form/statuses', [
+        'model' => $model,
+        'name' => 'Banner[status]',
+    ])
+
+    <div class="line line-dashed b-b line-lg"></div>
+
+    @include('ecommerce::_form/images', [
+        'images' => (isset($images)?$images:null),
+        'multiple' => 0,
         'model' => $model
     ])
+
+    <div class="line line-dashed b-b line-lg"></div>
 
     <div class="">
         <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
@@ -57,53 +66,46 @@
         </ul>
         <div class="form-horizontal">
             <div class="tab-content">
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.name'),
+                    'input' => Form::text('Banner[name]', $model->name, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.link'),
+                    'input' => Form::text('Banner[link]', $model->link, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.is_blank'),
+                    'input' => Form::hidden('Banner[is_blank]',0)
+                    .Form::checkbox('Banner[is_blank]', 1, $model->is_blank?true:false, ['style'=>'margin-top: 11px;']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.width'),
+                    'input' => Form::text('Banner[width]', $model->width, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.height'),
+                    'input' => Form::text('Banner[height]', $model->height, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.code'),
+                    'input' => Form::textarea('Banner[code]', $model->code, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.max_views'),
+                    'input' => Form::text('Banner[max_views]', $model->max_views, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.current_views'),
+                    'input' => Form::text('Banner[current_views]', $model->current_views, ['class' => 'form-control']),
+                ])
+                @include('ecommerce::_form/group',[
+                    'label' => trans('ecommerce::default.'.$codename.'.fields.untill_at'),
+                    'input' => Form::text('Banner[untill_at]', ($model->untill_at?$model->untill_at->format('d/m/Y'):''), ['class' => 'form-control']),
+                ])
 
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.name'),
-                'input' => Form::text('Banner[name]', $model->name, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.link'),
-                'input' => Form::text('Banner[link]', $model->link, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.is_blank'),
-                'input' => Form::hidden('Banner[is_blank]',0)
-                .Form::checkbox('Banner[is_blank]', 1, $model->is_blank?true:false, ['style'=>'margin-top: 11px;']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.width'),
-                'input' => Form::text('Banner[width]', $model->width, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.height'),
-                'input' => Form::text('Banner[height]', $model->height, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.code'),
-                'input' => Form::textarea('Banner[code]', $model->code, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.max_views'),
-                'input' => Form::text('Banner[max_views]', $model->max_views, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.current_views'),
-                'input' => Form::text('Banner[current_views]', $model->current_views, ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.untill_at'),
-                'input' => Form::text('Banner[untill_at]', ($model->untill_at?$model->untill_at->format('d/m/Y'):''), ['class' => 'form-control']),
-            ])
-            @include('ecommerce::_form/group',[
-                'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
-                'input' => Form::hidden('Banner[status]',0)
-                .Form::checkbox('Banner[status]', 1, $model->status?true:false, ['style'=>'margin-top: 11px;']),
-            ])
-
-            @foreach(config('app.locales') as $localeIndex => $locale)
+                @foreach(config('app.locales') as $localeIndex => $locale)
                     <div role="tabpanel" class="tab-pane{{ ($localeIndex==0) ? ' active' : '' }}" id="lang-{{ $locale }}">
-
 
                     </div>
                 @endforeach
@@ -120,6 +122,7 @@
                         ) !!}
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -149,5 +152,6 @@
     });
 </script>
 
-@include('media::manager.modal',['image_ids'=>[''],'params' => ['multiple' => 0]])
+@include('ecommerce::_form.media_modal',['image_ids'=>[''],'params' => []])
+
 @endsection

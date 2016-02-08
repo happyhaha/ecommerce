@@ -24,7 +24,7 @@ class SpecialOffer extends BaseModel implements Nodeable
      * @var array
      */
     protected $fillable = [
-        'status',
+        'status'
     ];
 
     /**

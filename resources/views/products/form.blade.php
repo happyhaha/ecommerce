@@ -15,24 +15,14 @@
 @section('sidebar')
     <div class="wrapper">
 
-        <div class="">
-            <div class="m-b-sm text-md">{{ trans('content::default.posts.moderation') }}</div>
-            <div>
-                @foreach(['1' => 'approved', '0' => 'discarded'] as $key => $status)
-                    <div class="radio">
-                        <label class="i-checks">
-                            {!! Form::radio('Product[status]', $key, ($key==$model->status?true:false)) !!}
-                            <i></i>
-                            {{ trans('social::default.moderation.'.$status) }}
-                        </label>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+        @include('ecommerce::_form/statuses', [
+            'model' => $model,
+            'name' => 'Product[status]',
+        ])
 
         <div class="line line-dashed b-b line-lg"></div>
 
-        @include('ecommerce::_form/images',[
+        @include('ecommerce::_form/images', [
             'images' => (isset($images)?$images:null),
             'multiple' => 1,
             'model' => $model

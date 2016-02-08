@@ -1,9 +1,6 @@
 @extends('admin::base')
 
 @section('main-before')
-@endsection
-
-@section('content')
     {!! Form::model($model, [
         'method' => ($model->exists) ? 'PUT' : 'POST',
         'route' => [
@@ -13,7 +10,34 @@
         'data-ng-controller' => 'ProductCategoryCtrl as PCat',
         'data-ng-init' => 'PCat.actions.init('.$model->id.')',
     ]) !!}
+@endsection
 
+@section('sidebar')
+    <div class="wrapper">
+
+        @include('ecommerce::_form/statuses', [
+            'model' => $model,
+            'name' => 'ProductCategory[status]',
+        ])
+
+        <div class="line line-dashed b-b line-lg"></div>
+
+        <div class="">
+            <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
+            {!! Form::submit(
+                trans('admin::default.actions.save'),
+                ['class' => 'btn btn-block btn-primary']
+            ) !!}
+            {!! Html::link(
+                admin_route('ecommerce.'.$codename.'.index'),
+                trans('admin::default.actions.back'),
+                ['class' => 'btn btn-sm btn-block btn-default']
+            ) !!}
+        </div>
+    </div>
+@endsection
+
+@section('content')
     <div class="wrapper-md">
         <div class="tab-container">
             <ul class="nav nav-tabs" role="tablist">
@@ -106,6 +130,9 @@
         </div>
 
     </div>
+@endsection
+
+@section('main-after')
     {!! Form::close() !!}
 @endsection
 

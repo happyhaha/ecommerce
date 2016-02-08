@@ -56,7 +56,8 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
      */
     protected $fillable = [
         'parent_id',
-        'slug'
+        'slug',
+        'status'
     ];
 
     /**

@@ -15,6 +15,13 @@
 @section('sidebar')
     <div class="wrapper">
 
+        @include('ecommerce::_form/statuses', [
+            'model' => $model,
+            'name' => 'Slider[status]',
+        ])
+
+        <div class="line line-dashed b-b line-lg"></div>
+
         @include('ecommerce::_form/images',[
             'images' => (isset($images)?$images:null),
             'multiple' => 1,
@@ -75,12 +82,6 @@
                     ])
                 </div>
 
-                @include('ecommerce::_form/group',[
-                    'label' => trans('ecommerce::default.'.$codename.'.fields.status'),
-                    'input' => Form::hidden('Slider[status]',0)
-                    .Form::checkbox('Slider[status]', 1, $model->status?true:false, ['style'=>'margin-top: 11px;']),
-                ])
-
                 <div class="form-group">
                     <div class="col-sm-4 col-sm-offset-2">
                         {!! Form::submit(
@@ -100,14 +101,14 @@
 </div>
 @endsection
 
+@section('main-after')
+    {!! Form::close() !!}
+@endsection
+
 @section('scripts')
     <script src="/vendor/ecommerce/js/angular/helpers.js"></script>
     <script src="/vendor/ecommerce/js/angular/slider.controller.js"></script>
     <script src="/vendor/ecommerce/js/angular/slider.service.js"></script>
 
     @include('ecommerce::_form.media_modal',['image_ids'=>['']])
-@endsection
-
-@section('main-after')
-{!! Form::close() !!}
 @endsection

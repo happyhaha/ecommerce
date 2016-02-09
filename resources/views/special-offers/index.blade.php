@@ -16,18 +16,7 @@
     <div class="wrapper-md">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="row wrapper">
-                    <div class="col-sm-4 hidden-xs js__disabledManipulation">
-                        <select class="input-sm form-control w-sm inline v-middle">
-                            <option value="delete">
-                                {{ trans('ecommerce::default.actions.delete_selected') }}
-                            </option>
-                        </select>
-                        <button data-action="batchAction" data-url="{{ '' }}" class="btn btn-sm btn-default apply_bulk">
-                            {{ trans('ecommerce::default.actions.apply') }}
-                        </button>
-                    </div>
-                </div>
+                @include('ecommerce::_index/bunch_actions', ['codename' => $codename])
                 <div class="table-responsive">
                     <table class="table table-striped b-t b-light">
                         <thead>

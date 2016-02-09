@@ -9,7 +9,6 @@ $router->get('product-categories/get-parent-filters', 'ProductCategoriesControll
 $router->resource('product-categories', 'ProductCategoriesController');
 //$router->delete('product-categories/batch/delete', 'ProductCategoriesController@destroyBatch');
 
-$router->resource('filters', 'FiltersController');
 $router->resource('product-brands', 'ProductBrandsController');
 $router->resource('product-sectors', 'ProductSectorsController');
 

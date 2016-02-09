@@ -128,7 +128,9 @@ class ProductRepository extends BaseRepository
     public function getBrandList()
     {
         $models = ProductBrand::all();
-        $ret = [];
+        $ret = [
+            '' => 'Выберите бренд',
+        ];
         foreach ($models as $model) {
             $ret[$model->id] = $model->getNodeValue('title', 'ru');
         }

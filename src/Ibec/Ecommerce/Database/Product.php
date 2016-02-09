@@ -88,7 +88,7 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
         ];
     }
 
-    public function setParentIdAttribute($value)
+    public function setProductBrandIdAttribute($value)
     {
         $this->attributes['product_brand_id'] = $value ?: null;
     }

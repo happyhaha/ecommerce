@@ -1,0 +1,12 @@
+.autocomplete-modal-item {
+    cursor: pointer;
+    padding: 5px 5px;
+}
+
+.autocomplete-modal-item:hover {
+    background-color: #F9F7F7;
+} 
+
+.autocomplete-modal-item.selected {
+    background: #eee;
+}

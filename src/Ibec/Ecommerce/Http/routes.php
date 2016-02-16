@@ -19,6 +19,8 @@ $router->resource('banners', 'BannersController');
 
 
 $router->get('orders/get-info', 'OrdersController@getInfo');
+$router->get('orders/autocomplete', ['as' => 'admin.ecommerce.orders.autocomplete', 'uses'=>'OrdersController@autocomplete']);
+$router->get('orders/user-autocomplete', ['as' => 'admin.ecommerce.orders.userAutocomplete', 'uses'=>'OrdersController@userAutocomplete']);
 $router->resource('orders', 'OrdersController');
 
 $router->get('sliders/get-info', 'SlidersController@getInfo');

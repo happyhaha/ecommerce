@@ -126,6 +126,8 @@ if(isset($image->id))
 
             if (multiple) {
                 queryParams.push('multiple=1');
+            } else {
+                queryParams.push('multiple=0');
             }
 
             if (queryParams.length) {

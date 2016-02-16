@@ -26,15 +26,19 @@ class ProductCategoryRepository extends BaseRepository
 
     public function save(&$model, $inputData)
     {
-        $input = $inputData['ProductCategory'];
-        if ($model->validate($input)) {
+        $mainData = $inputData['ProductCategory'];
+        if ($model->validate($mainData)) {
 
-            $model->fill($input);
+            $model->fill($mainData);
             if (!$model->exists) {
-                $model->slug = $model->createSlug($input['ru']['title']);
+                $model->slug = $model->createSlug($mainData['ru']['title']);
             }
             $model->save();
-            $this->saveNodes($model, 'product_category_id', $input);
+            $this->saveNodes($model, 'product_category_id', $mainData);
+
+            if ($this->hasImages($model)) {
+                $this->saveImage($model, $inputData);
+            }
 
             $filters = array_get($inputData, 'FilterGroup', []);
 

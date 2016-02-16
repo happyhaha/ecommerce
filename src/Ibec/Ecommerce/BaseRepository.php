@@ -92,8 +92,9 @@ abstract class BaseRepository
      * @param Eloquent $model
      * @param string $relationKey
      * @param array $input
+     * @param function|null $fieldsSetCallback
      */
-    public static function saveNodes($model, $relationKey, $input = [])
+    public static function saveNodes($model, $relationKey, $input = [], $fieldsSetCallback = null)
     {
         $nodes = [];
         if ($model->exists) {
@@ -121,6 +122,9 @@ abstract class BaseRepository
                     $node = new $nodeClassName();
                     $node->fill($filtered);
                     $node->{$relationKey} = $model->id;
+                    if (is_callable($fieldsSetCallback)) {
+                        call_user_func($fieldsSetCallback, $node);
+                    }
                     $node->language_id = $locale;
                     $node->save();
                 }
@@ -159,7 +163,6 @@ abstract class BaseRepository
     {
         $mediaItems = array_get($data, 'Media', []);
         if ($mediaItems) {
-
             $rows = [];
             foreach ($mediaItems as $data) {
                 $rows[$data['image_id']] = [

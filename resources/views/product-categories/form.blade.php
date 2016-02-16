@@ -22,6 +22,14 @@
 
         <div class="line line-dashed b-b line-lg"></div>
 
+        @include('ecommerce::_form/images', [
+            'images' => (isset($images)?$images:null),
+            'multiple' => 0,
+            'model' => $model
+        ])
+
+        <div class="line line-dashed b-b line-lg"></div>
+
         <div class="">
             <div class="m-b-sm text-md">{{ trans('admin::default.actions.label') }}</div>
             {!! Form::submit(
@@ -140,5 +148,7 @@
     <script src="/vendor/ecommerce/js/angular/helpers.js"></script>
     <script src="/vendor/ecommerce/js/angular/product_category.controller.js"></script>
     <script src="/vendor/ecommerce/js/angular/product_category.service.js"></script>
+
+    @include('ecommerce::_form.media_modal',['image_ids'=>[''],'params' => []])
 @endsection
 

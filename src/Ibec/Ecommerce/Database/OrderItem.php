@@ -15,6 +15,8 @@ class OrderItem extends BaseModel
      */
     protected $table = 'order_items';
 
+    public $timestamps = false;
+
     /**
      * Mass-assignable attributes
      *
@@ -28,4 +30,14 @@ class OrderItem extends BaseModel
         'count',
         'status',
     ];
+
+    public function product()
+    {
+        return $this->hasOne('Ibec\Ecommerce\Database\Product', 'id', 'product_id');
+    }
+
+    public function order()
+    {
+        return $this->hasOne('Ibec\Ecommerce\Database\Order', 'id', 'order_id');
+    }
 }

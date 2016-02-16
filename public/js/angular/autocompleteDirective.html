@@ -1,0 +1,33 @@
+<div class="modal fade autocomplete-modal" id="{{modal_id}}">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">{{modal_title}}</h4>
+			</div>
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group" style="margin: 0 0 15px 0">
+                            <input type="text" class="form-control" data-ng-model="search_input">
+                            <div class="text-muted" data-ng-bind="modal_hint"></div>
+                        </div>
+                        <div class="form-group" style="margin: 0 0 15px 0">
+                            <div data-ng-repeat="item in results"
+                                 class="autocomplete-modal-item"
+                                 data-ng-class="{'selected': item == choosed}"
+                                 data-ng-click="actions.selectItem(item)">
+                                <strong data-ng-bind="item.title"></strong>
+                                <span data-ng-bind="item.description"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+				<button type="button" class="btn btn-primary" data-ng-click="actions.finish()">Выбрать</button>
+			</div>
+		</div>
+	</div>
+</div>

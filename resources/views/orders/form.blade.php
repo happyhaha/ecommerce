@@ -28,7 +28,11 @@
             <div class="tab-content">
                 @include('ecommerce::_form/group',[
                     'label' => trans('ecommerce::default.'.$codename.'.fields.user_id'),
-                    'input' => Form::text('Order[user_id]', $model->user_id, ['class' => 'form-control']),
+                    'input' => '<div class="clearfix">'.
+                        '<div class="pull-left" style="padding: 7px 7px 0 0;" data-ng-bind="Order.models.user.title"></div>'.
+                        '<a class="pull-left btn btn-info" data-ng-bind-template="@{{Order.models.user?\'Изменить\':\'Выбрать\'}}" data-toggle="modal" href="#autocomplete-user-modal"></a>'.
+                        '<input name="Order[user_id]" class="hidden" data-ng-model="Order.models.user.id" />'.
+                    '</div>',
                 ])
                 @include('ecommerce::_form/group',[
                     'label' => trans('ecommerce::default.'.$codename.'.fields.payment_type'),
@@ -71,9 +75,10 @@
                                     <th>ID</th>
                                     <th>Наименование</th>
                                     <th>Кол-во</th>
+                                    <th>Цена</th>
                                     <th>Статус</th>
                                     <th>
-                                        <button class="btn btn-xs btn-success" type="button" data-ng-click="Order.actions.addItem()">
+                                        <button class="btn btn-xs btn-success" type="button" data-toggle="modal" href="#autocomplete-modal">
                                             &nbsp;+&nbsp;
                                         </button>
                                     </th>
@@ -81,15 +86,21 @@
                             </thead>
                             <tbody>
                                 <tr data-ng-repeat="item in Order.models.items">
-                                    <td data-ng-bind="item.id"></td>
+                                    <td>
+                                        <div data-ng-bind="item.id"></div>
+                                        <input type="text" class="hidden" name="OrderItem[@{{ $index }}][product_id]" data-ng-model="item.id">
+                                    </td>
                                     <td data-ng-bind="item.title"></td>
                                     <td>
-                                        <input type="number" class="form-control" data-ng-model="item.count" style="max-width:80px;" />
+                                        <input type="number" name="OrderItem[@{{ $index }}][count]" class="form-control" data-ng-model="item.count" style="max-width:80px;" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="OrderItem[@{{ $index }}][price]" class="form-control" data-ng-model="item.price">
                                     </td>
                                     <td>
                                         <select data-ng-model="item.status" data-ng-options="key as value for (key,value) in Order.models.item_status_list" class="form-control">
-
                                         </select>
+                                        <input type="text" class="hidden" name="OrderItem[@{{ $index }}][status]" data-ng-model="item.status">
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-xs btn-danger" data-ng-click="Order.actions.removeItem(item)">
@@ -100,13 +111,29 @@
                             </tbody>
                             <tbody data-ng-if="!Order.models.items.length">
                                 <tr>
-                                    <td colspan="5">
+                                    <td colspan="6">
                                         Нет товаров в данном заказе
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div>
+
+                <div data-autocomplete-modal
+                     data-id="autocomplete-modal"
+                     data-title="Выбор товара"
+                     data-hint="Введите ID или часть названия товара"
+                     data-callback="Order.actions.autocompleteSelected"
+                     data-url="{{admin_route('ecommerce.'.$codename.'.autocomplete')}}">
+                </div>
+
+                <div data-autocomplete-modal
+                     data-id="autocomplete-user-modal"
+                     data-title="Выбор пользователя"
+                     data-hint="Введите ID или имя или email пользователя"
+                     data-callback="Order.actions.userSelected"
+                     data-url="{{admin_route('ecommerce.'.$codename.'.userAutocomplete')}}">
                 </div>
 
 
@@ -130,6 +157,7 @@
 @endsection
 
 @section('scripts')
+    <link rel="stylesheet" href="/vendor/ecommerce/css/custom.css">
     <script src="/vendor/ecommerce/js/angular/helpers.js"></script>
     <script src="/vendor/ecommerce/js/angular/order.controller.js"></script>
     <script src="/vendor/ecommerce/js/angular/order.service.js"></script>

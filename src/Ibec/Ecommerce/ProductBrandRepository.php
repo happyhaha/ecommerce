@@ -23,20 +23,20 @@ class ProductBrandRepository extends BaseRepository
         $this->modelName = get_class($model);
     }
 
-    public function save(&$model, $mainData)
+    public function save(&$model, $input)
     {
-        $input = array_get($mainData, 'ProductBrand', []);
-        if ($model->validate($input)) {
-            $model->fill($input);
+        $mainData = array_get($input, 'ProductBrand', []);
+        if ($model->validate($mainData)) {
+            $model->fill($mainData);
             if (!$model->exists) {
-                $model->slug = $model->createSlug($input['ru']['title']);
+                $model->slug = $model->createSlug($mainData['ru']['title']);
             }
             $model->save();
 
-            $this->saveNodes($model, 'product_brand_id', $input);
+            $this->saveNodes($model, 'product_brand_id', $mainData);
 
             if ($this->hasImages($model)) {
-                $this->saveImage($model, $mainData);
+                $this->saveImage($model, $input);
             }
 
             return true;

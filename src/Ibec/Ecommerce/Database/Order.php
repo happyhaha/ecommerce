@@ -35,6 +35,22 @@ class Order extends BaseModel
         'status',
     ];
 
+    public function user()
+    {
+        return $this->hasOne('Ibec\Acl\User', 'id', 'user_id');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany('Ibec\Ecommerce\Database\OrderItem', 'order_id');
+    }
+
+    public function setUserIdAttribute($value)
+    {
+        $this->attributes['user_id'] = $value ?: null;
+    }
+
+
     public function getPaymentTypeList()
     {
         return [

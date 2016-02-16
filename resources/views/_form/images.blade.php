@@ -18,7 +18,7 @@
         <h4>{{$blockTitle}}</h4>
     </div>
     <div>
-        <a style="margin-bottom:20px; {{($images->count()>0 && (!isset($multiple) || $multiple ==0))?'display:none;':''}}" href="#" class="btn add_image btn-primary btn-block btn-addon add_button media-add-item" data-toggle="modal" data-type="images" data-target="#add_image" data-input="some_input">
+        <a style="margin-bottom:20px; {{($images && $images->count()>0 && (!isset($multiple) || $multiple ==0))?'display:none;':''}}" href="#" class="btn add_image btn-primary btn-block btn-addon add_button media-add-item" data-toggle="modal" data-type="images" data-target="#add_image" data-input="some_input">
             <i class="fa fa-plus"></i> &nbsp; {{trans('ecommerce::default.actions.image_add')}}
         </a>
     </div>

@@ -51,7 +51,7 @@ class Order extends BaseModel
     }
 
 
-    public function getPaymentTypeList()
+    public static function getPaymentTypeList()
     {
         return [
             0 => 'Оплата картой',
@@ -59,7 +59,7 @@ class Order extends BaseModel
         ];
     }
 
-    public function getDeliveryTypeList()
+    public static function getDeliveryTypeList()
     {
         return [
             0 => 'Доставка курьером',
@@ -67,7 +67,7 @@ class Order extends BaseModel
         ];
     }
 
-    public function getStatusList()
+    public static function getStatusList()
     {
         return [
             0 => 'Новый',
@@ -78,11 +78,36 @@ class Order extends BaseModel
         ];
     }
 
-    public function getPaymentStatusList()
+    public static function getPaymentStatusList()
     {
         return [
             0 => 'Не оплачено',
             1 => 'Оплачено',
         ];
     }
+
+    public function getOrderStatus()
+    {
+        $list = self::getStatusList();
+        return $list[$this->status];
+    }
+
+    public function getOrderPaymentStatus()
+    {
+        $list = self::getPaymentStatusList();
+        return $list[$this->payment_status];
+    }
+
+    public function getOrderPaymentType()
+    {
+        $list = self::getPaymentTypeList();
+        return $list[$this->payment_type];
+    }
+
+    public function getOrderDeliveryType()
+    {
+        $list = self::getDeliveryTypeList();
+        return $list[$this->delivery_type];
+    }
+
 }

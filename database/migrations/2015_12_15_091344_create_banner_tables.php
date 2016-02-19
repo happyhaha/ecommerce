@@ -23,7 +23,7 @@ class CreateBannerTables extends Migration
             $table->text('code')->default(null);
             $table->smallInteger('max_views')->default(0);
             $table->smallInteger('current_views')->default(0);
-            $table->timestamp('untill_at');
+            $table->timestamp('untill_at')->nullable();
             $table->timestamps();
             $table->boolean('status')->default(1);
         });

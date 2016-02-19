@@ -113,6 +113,8 @@ if(isset($image->id))
         $('#add_image').on('shown.bs.modal', function(e) {
             triggerButton = $(e.relatedTarget);
 
+            $('#image_upload').val(''); // ДА-ЗАКОЛЕБАЛИ ЭТИ ГАЛОЧКИ
+
             multiple = Number(triggerButton.parents(mediaWidgetOpts.widget).data('multiple'));
             var iframeUrl = '{{ action('\Ibec\Media\Http\Controllers\ManagerController@getFrame') }}';
             var queryParams = [];

@@ -16,8 +16,7 @@ if(isset($image->id))
 </div>
 
 <script>
-    var multiple = parseInt( {{isset($params['multiple'])?$params['multiple']:0}} );
-    var semimultiple = parseInt( {{isset($params['semimultiple']) ? $params['semimultiple'] : null}} );
+    var multiple = false;
     var mediaType = "{{ isset($params['mediaType']) ? $params['mediaType'] : '' }}";
     var currFile = '';
     var isChangeAction = '';
@@ -41,6 +40,10 @@ if(isset($image->id))
         }
     });
 
+    /**
+     * Функция вызывается в тот момент, когда в Iframe
+     * в модалке нажмут кнопку "Сохранить изменения"
+     */
     function save_data (arr, data, path) {
         $('#add_image').modal('hide');
 
@@ -48,8 +51,21 @@ if(isset($image->id))
 
         if (mediaType == 'images' || mediaType == 'videos' || true) {
             // var files = $('#image_upload').val().split(',');
-            var files = arr;
             var widget = triggerButton.parents(mediaWidgetOpts.widget);
+
+            if (typeof files !== 'object') {
+                files = [files];
+            }
+            var files = [];
+            var abandonedImages = [];
+            arr.forEach(function(image_id,index){
+                var checkObj = widget.find('input[name$="image_id]"][value="'+image_id+'"]') ;
+                if (!checkObj.length) {
+                    files.push(image_id);
+                } else {
+                    abandonedImages.push(image_id);
+                }
+            });
 
             // send_data('{{@$url}}', files, path);
             var queryParams = {
@@ -63,34 +79,43 @@ if(isset($image->id))
                 queryParams.urlField = widget.data('urlField');
             }
 
-            $.ajax({
-                method: "GET",
-                url: '/{{ config('admin.uri') }}/ecommerce/images',
-                data: queryParams,
-                dataType: 'html',
-                success: function (response) {
-
-
-                    // Изменение
-                    if (triggerButton.hasClass(mediaWidgetOpts.changeClass)) {
-                        var holder = triggerButton.parents(mediaWidgetOpts.item);
-                        holder.after(response);
-                        holder.remove();
-                    } else {
-                        var holder = triggerButton.parents(mediaWidgetOpts.widget)
-                                .find(mediaWidgetOpts.holder);
-                        holder.append(response);
-                        if (!widget.data('multiple')) {
-                            widget.find(mediaWidgetOpts.addBtn).hide();
+            if (files.length) {
+                $.ajax({
+                    method: "GET",
+                    url: '/{{ config('admin.uri') }}/ecommerce/images',
+                    data: queryParams,
+                    dataType: 'html',
+                    success: function (response) {
+                        // Изменение
+                        if (triggerButton.hasClass(mediaWidgetOpts.changeClass)) {
+                            var holder = triggerButton.parents(mediaWidgetOpts.item);
+                            holder.after(response);
+                            holder.remove();
+                        } else {
+                            var holder = triggerButton.parents(mediaWidgetOpts.widget)
+                                    .find(mediaWidgetOpts.holder);
+                            holder.append(response);
+                            if (!widget.data('multiple')) {
+                                widget.find(mediaWidgetOpts.addBtn).hide();
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+
+            if (abandonedImages.length) {
+                alert('Некоторые изображения ('+abandonedImages.length+' шт.)' +
+                'не были добавлены, т.к. они уже есть в выбранной галерее');
+            }
+
         }
     }
 
     $(document).ready(function(){
 
+        /**
+         * Клик по любой кнопке Добавить / Изменить
+         */
         $(document).on('click', '.add_image', function () {
             isChangeAction = $(this).find('i').hasClass('fa-cogs');
 
@@ -110,6 +135,9 @@ if(isset($image->id))
             }
         });
 
+        /**
+         * При показе модалки, подставлять внутрь модалки правильный URL для IFrame
+         */
         $('#add_image').on('shown.bs.modal', function(e) {
             triggerButton = $(e.relatedTarget);
 
@@ -142,7 +170,7 @@ if(isset($image->id))
         });
 
         /**
-         * Удаление медиа элемента
+         * Клик по кнопке "Удалить"
          */
         $('body').on('click', mediaWidgetOpts.deleteBtn, function(e) {
             e.preventDefault();

@@ -23,7 +23,7 @@
                         <tr>
                             <th><label  class="i-checks m-b-none js-check-checkbox"><input onchange="applyBulkCheck($(this))" type="checkbox"><i></i></label></th>
                             <th>{{ trans('ecommerce::default.filters.fields.id') }}</th>
-                            <th>{{ trans('ecommerce::default.filters.fields.title') }}</th>
+                            <th>{{ trans('ecommerce::default.filters.fields.images') }}</th>
                             <th>{{ trans('admin::default.actions.label') }}</th>
                         </tr>
                         </thead>
@@ -39,7 +39,15 @@
                                     {{str_repeat('-', $item->depth)}} {{ $item->id }}
                                 </td>
                                 <td>
-                                    {{ $item->name }}
+                                    <div class="row">
+                                        @if ($images = $item->images()->where('subtype', 'image')->get())
+                                            @foreach ($images as $image)
+                                                <div class="col-md-3">
+                                                    <img src="{{$image->path}}" alt="" style="max-width: 100%;">
+                                                </div>    
+                                            @endforeach
+                                        @endif
+                                    </div>
                                 </td>
                                 <td>
                                     <a class = 'btn btn-sm btn-default' href="{{ admin_route('ecommerce.'.$codename.'.edit', [$item->id]) }}">

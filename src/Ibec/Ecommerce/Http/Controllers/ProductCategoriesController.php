@@ -2,6 +2,7 @@
 
 namespace Ibec\Ecommerce\Http\Controllers;
 
+use App\Models\Product;
 use Ibec\Admin\Services\Document\Document;
 use Illuminate\Contracts\Auth\Guard;
 use Response;
@@ -68,6 +69,8 @@ class ProductCategoriesController extends BaseController
 
     public function getParentFilters(Request $request)
     {
+
+        Product::
         $id = $request->get('id');
         $model = $this->repository->findByPk($id);
         $ret = [];

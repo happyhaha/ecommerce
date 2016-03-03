@@ -59,6 +59,7 @@
                         @endforelse
                         </tbody>
                     </table>
+                    @include('ecommerce::pagination')
                 </div>
                 <div class="row wrapper">
                     <div class="col-sm-4 hidden-xs js__disabledManipulation">

@@ -94,4 +94,9 @@ class SlidersController extends BaseController
 
         return $ret;
     }
+
+    public function setBackground(Request $request)
+    {
+
+    }
 }

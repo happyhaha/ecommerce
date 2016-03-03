@@ -17,7 +17,6 @@
         'model' => $model,
         'name' => 'Banner[status]',
     ])
-
     <div class="line line-dashed b-b line-lg"></div>
 
     @include('ecommerce::_form/images', [

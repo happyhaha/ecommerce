@@ -50,6 +50,7 @@ class EcommerceServiceProvider extends ServiceProvider
             app('admin_menu')->addItem($codename, admin_route($codename.'.banners.index'), 'Баннеры');
             app('admin_menu')->addItem($codename, admin_route($codename.'.sliders.index'), 'Слайдеры');
             app('admin_menu')->addItem($codename, admin_route($codename.'.orders.index'), 'Заказы');
+
             // app('admin_menu')->addItem('ecommerce', admin_route($codename.'.items'), 'Товары');
         }
     }

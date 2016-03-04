@@ -73,19 +73,30 @@ class ProductCategoryRepository extends BaseRepository
     /**
      * @return array|\Illuminate\Database\Eloquent\Collection
      */
-    public function getTree()
+    public function getTree($id = "")
     {
-        $models = MainModel::where('id', '>', 0)->orderBy('lft', 'asc')->get();
+        if(!empty($id)) //не выводить в селекте самого себя
+        {
+            $models = MainModel::where('id', '>', 0)->whereNotIn('id', [$id])->orderBy('lft', 'asc')->get();    
+        }
+        else
+        {
+            $models = MainModel::where('id', '>', 0)->orderBy('lft', 'asc')->get();
+        }
+        
 
-        $ret = [
+        $html = [
             '' => 'Главная категория',
         ];
-
         foreach ($models as $model) {
-            $ret[$model->id] = $model->getNodeValue('title', 'ru');
+            $html[$model->id] = str_repeat("&mdash;", $model->depth).$model->getNodeValue('title', 'ru');
+            if ( array_key_exists('children', $model) ) {
+                $html.= toSelect($model['children'], $model->depth);
+            }
         }
+        
 
-        return $ret;
+        return $html;
     }
 
     public function getPlainTree()

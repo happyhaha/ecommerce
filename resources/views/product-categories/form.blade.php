@@ -65,7 +65,7 @@
                             {{ trans('ecommerce::default.'.$codename.'.fields.parent_id') }}
                         </label>
                         <div class="col-sm-10">
-                            {!! Form::select('ProductCategory[parent_id]', $repository->getTree(), $model->parent_id, [
+                            {!! Form::select('ProductCategory[parent_id]', $repository->getTree($model->id), $model->parent_id, [
                                 'class' => 'form-control',
                                 'data-changed-directive' => '',
                                 'data-ev' => '\'auuu\'',

@@ -70,7 +70,7 @@ class ProductCategoriesController extends BaseController
     public function getParentFilters(Request $request)
     {
 
-        Product::
+        // Product::
         $id = $request->get('id');
         $model = $this->repository->findByPk($id);
         $ret = [];

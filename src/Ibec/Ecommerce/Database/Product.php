@@ -103,6 +103,16 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
         );
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(
+            'App\Models\Tag',
+            'tag_product',
+            'product_id',
+            'tag_id'
+        );
+    }
+
     public function filters()
     {
         return $this->belongsToMany(

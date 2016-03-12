@@ -87,6 +87,7 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
         );
     }
 
+
     public function setParentIdAttribute($value)
     {
         $this->attributes['parent_id'] = $value ?: null;

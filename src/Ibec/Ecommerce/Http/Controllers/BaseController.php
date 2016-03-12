@@ -37,7 +37,6 @@ abstract class BaseController extends Controller
         ]);
 
         $this->document->page->title(' > '.trans('ecommerce::default.'.$this->codename.'.index'));
-
         $items = $this->repository->all($request->all());
 
         return view('ecommerce::'.$this->codename.'.index', [
@@ -53,8 +52,8 @@ abstract class BaseController extends Controller
      */
     public function create()
     {
-        $model = $this->repository->getNew();
 
+        $model = $this->repository->getNew();
         $this->document->breadcrumbs([
             trans('ecommerce::default.'.$this->codename.'.index') => admin_route('ecommerce.'.$this->codename.'.index'),
             trans('ecommerce::default.'.$this->codename.'.create') => '',

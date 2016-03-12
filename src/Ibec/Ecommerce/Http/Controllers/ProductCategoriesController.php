@@ -8,8 +8,11 @@ use Illuminate\Contracts\Auth\Guard;
 use Response;
 use Illuminate\Http\Request;
 use Ibec\Ecommerce\ProductCategoryRepository;
+use Ibec\Ecommerce\Database\ProductCategory;
+use DB;
+use App\Models\Tag;
 
-class ProductCategoriesController extends BaseController
+class ProductCategoriesController extends BaseController //temporary BaseController
 {
 
     protected $codename = 'product-categories';
@@ -19,6 +22,25 @@ class ProductCategoriesController extends BaseController
         $this->repository = $repository;
 
         parent::__construct($document, $auth);
+    }
+
+    //перезаписанный метод, для того чтобы изменить вью именно модуля Категорий(index)
+
+    public function index(Request $request)
+    {
+        $this->document->breadcrumbs([
+            trans('ecommerce::default.'.$this->codename.'.index') => '',
+        ]);
+
+        $this->document->page->title(' > '.trans('ecommerce::default.'.$this->codename.'.index'));
+
+        $items = ProductCategory::all()->toHierarchy();
+
+
+        return view('ecommerce::'.$this->codename.'.index',[
+            'items' => $items,
+            'codename' => $this->codename,
+            ]);
     }
 
     public function getFilters(Request $request)
@@ -36,6 +58,20 @@ class ProductCategoriesController extends BaseController
             $ret['filters'] = $this->compactFilters($filters);
             $parentFilters = $model->parentFilters();
             $ret['parent_filters'] = $this->compactFilters($parentFilters);
+        }
+
+        return $ret;
+    }
+
+    public function getTags(Request $request)
+    {
+        $id = $request->get('id');
+        $ret['id'] = $id;
+        $model = $this->repository->findByPk($id);
+
+        if ($model) {
+            $tags = $model->tags;
+            $ret['filters'] = $tags;
         }
 
         return $ret;
@@ -78,5 +114,14 @@ class ProductCategoriesController extends BaseController
         $ret['parent_filters'] = $this->compactFilters($parentFilters);
 
         return $ret;
+    }
+
+    public function putTree(Request $request)
+    {
+        $tree = $request->input('tree', []);
+
+        ProductCategory::buildTree($tree);
+
+        return ['status' => 'success'];
     }
 }

@@ -6,6 +6,7 @@ use DB;
 use Ibec\Ecommerce\Database\Product as MainModel;
 use Ibec\Ecommerce\Database\ProductBrand;
 use Ibec\Ecommerce\Database\Filter;
+use App\Models\Tag;
 
 /**
  * ProductsRepository - класс репозитория для всех запросов моделей на стороне контроллера админки
@@ -149,5 +150,26 @@ class ProductRepository extends BaseRepository
         }
 
         return $ret;
+    }
+
+    public function getTags()
+    {
+        return Tag::where('id','>',0)->get();
+    }
+
+    public function getCategoryTags($id)
+    {
+        return DB::select('select * from tag_category where category_id = :id', ['id' => $id]);
+    }
+
+    public function getProductTags($id)
+    {
+        $ids = DB::select('SELECT tag_id FROM `tag_product` WHERE product_id = :id', ['id'=>$id]);
+        $tags = array();
+        foreach($ids as $id)
+        {
+            $tags[] = (int) $id->tag_id;
+        }
+        return $tags;
     }
 }

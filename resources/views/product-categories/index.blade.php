@@ -13,7 +13,8 @@
 @endsection
 
 @section('content')
-    <div class="wrapper-md">
+    <div class="wrapper-md" data-ng-controller="MenuTreeCtrl"
+       ng-init="url = '{{ admin_route('categories.tree.all') }}'; ">
         <div class="panel panel-default">
             <div class="panel-heading">
                 @include('ecommerce::_index/bunch_actions', ['codename' => $codename])
@@ -27,40 +28,23 @@
                             <th>{{ trans('admin::default.actions.label') }}</th>
                         </tr>
                         </thead>
+                        @if(count($items))
+                        <div class="panel-body">
+                            <div ui-jq="nestable" ui-callback="collapseNestable" class="dd">
+                                @include('ecommerce::product-categories._tree', ['items' => $items])
+                            </div>
+                        </div>
+                            
+                        @else
                         <tbody>
-                        @forelse($items as $item)
-                            <tr>
-                                <td class="v-middle" style="width:20px;">
-                                    <label class="i-checks m-b-none js-check-checkbox active">
-                                        <input type="checkbox" data-value="{{$item->id}}"><i></i>
-                                    </label>
-                                </td>
-                                <td>
-                                    {{str_repeat('-', $item->depth)}} {{ $item->id }}
-                                </td>
-                                <td>
-                                    @if($item->node)
-                                        {{ $item->node->title }}
-                                    @endif
-                                </td>
-                                <td>
-                                    <a class = 'btn btn-sm btn-default' href="{{ admin_route('ecommerce.product-categories.edit', [$item->id]) }}">
-                                        {{ trans('admin::default.actions.edit') }}
-                                    </a>
-                                    <a class = 'btn btn-sm btn-danger destroy-confirm' href="{{ admin_route('ecommerce.product-categories.destroy', [$item->id]) }}">
-                                        {{ trans('admin::default.actions.destroy') }}
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
+
                             <tr>
                                 <td colspan="5">{{ trans('ecommerce::default.filters.empty') }}</td>
                             </tr>
-                        @endforelse
-
                         </tbody>
+                            
+                        @endif
                     </table>
-                    @include('ecommerce::pagination')
                 </div>
                 <div class="row wrapper">
                     <div class="col-sm-4 hidden-xs js__disabledManipulation">
@@ -77,4 +61,9 @@
             </div>
         </div>
     </div>
+    <script>
+        collapseNestable = function(nestable) {
+            $(nestable).nestable('collapseAll');
+        }
+    </script>
 @endsection

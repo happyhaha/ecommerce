@@ -90,6 +90,14 @@
                         Отрасли и Акции
                     </a>
                 </li>
+
+                <li class="">
+                    <a href="#tab-tags-info" role="tab" data-toggle="tab">
+                        Тэги
+                    </a>
+                </li>
+
+
             </ul>
             <div class="form-horizontal">
                 <div class="tab-content">

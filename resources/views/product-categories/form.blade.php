@@ -14,7 +14,6 @@
 
 @section('sidebar')
     <div class="wrapper">
-
         @include('ecommerce::_form/statuses', [
             'model' => $model,
             'name' => 'ProductCategory[status]',
@@ -56,10 +55,11 @@
                         </a>
                     </li>
                 @endforeach
+
             </ul>
             <div class="form-horizontal">
-                <div class="tab-content">
 
+                <div class="tab-content">
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="{{ $locale }}_title">
                             {{ trans('ecommerce::default.'.$codename.'.fields.parent_id') }}
@@ -73,11 +73,10 @@
                             <div class="text-muted">{{  '' }}</div>
                         </div>
                     </div>
-
-
                     <div class="line line-dashed b-b line-lg pull-in"></div>
 
                     @foreach(config('app.locales') as $localeIndex => $locale)
+
                         <div role="tabpanel" class="tab-pane{{ ($localeIndex==0) ? ' active' : '' }}" id="lang-{{ $locale }}">
 
                             @include('ecommerce::_form/group',[
@@ -120,6 +119,7 @@
 
                         </div>
                     @endforeach
+
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             {!! Form::submit(
@@ -133,7 +133,10 @@
                             ) !!}
                         </div>
                     </div>
+
                 </div>
+
+
             </div>
         </div>
 

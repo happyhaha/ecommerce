@@ -53,4 +53,10 @@ class Filter extends BaseModel implements Nodeable
         ->groupBy('filters.id');
     }
 
+    public function filter_group()
+    {
+        return $this->belongsTo(FilterGroup::class, 'filter_group_id');
+    }
+
+
 }

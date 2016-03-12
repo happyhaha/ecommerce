@@ -70,6 +70,20 @@ class ProductRepository extends BaseRepository
                 $model->sectors()->detach();
             }
 
+            // Привязываем отрасли
+            $tagIds = [];
+            $tagData = array_get($input, 'ProductTag', []);
+            foreach ($tagData as $item) {
+                if ($item['checked']==1) {
+                    $tagIds[] = $item['id'];
+                }
+            }
+            if ($tagIds) {
+                $model->tags()->sync($tagIds);
+            } else {
+                $model->tags()->detach();
+            }
+
             // Привязываем акции
             $specialIds = [];
             $specialData = array_get($input, 'SpecialOffer', []);

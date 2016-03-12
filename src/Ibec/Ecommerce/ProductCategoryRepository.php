@@ -5,7 +5,6 @@ namespace Ibec\Ecommerce;
 use Ibec\Ecommerce\Database\ProductCategory as MainModel;
 use Ibec\Ecommerce\Database\FilterGroup;
 use DB;
-use App\Models\Tag;
 /**
  * Класс репозитория для всех запросов моделей на стороне контроллера админки
  */
@@ -37,12 +36,7 @@ class ProductCategoryRepository extends BaseRepository
 
             $model->save();
             $this->saveNodes($model, 'product_category_id', $mainData);
-            //записать в junction table
-            DB::delete('delete from tag_category where category_id = :id', ['id' => $model->id]);
-            foreach($mainData['tags'] as $tag)
-            {
-                DB::insert('insert into tag_category (category_id, tag_id) values (?, ?)', [$model->id, $tag]);
-            }
+
             if ($this->hasImages($model)) {
                 $this->saveImage($model, $inputData);
             }

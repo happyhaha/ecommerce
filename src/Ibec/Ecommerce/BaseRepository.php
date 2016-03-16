@@ -56,7 +56,9 @@ abstract class BaseRepository
         if (is_array($id)) {
             $this->query()->whereIn('id', $id)->delete();
         } else {
-            $this->query()->where('id', $id)->delete();
+            //удаление сделал через модель, чтобы закинуть экземпляр модели в память для дальнейшего вызова события deleted, который сбрасывает кэш категорий на главной странице
+            $modelName::where('id','=',$id)->first()->delete();
+//            $this->query()->where('id', $id)->delete();
         }
     }
 

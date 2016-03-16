@@ -70,7 +70,7 @@ class ProductRepository extends BaseRepository
                 $model->sectors()->detach();
             }
 
-            // Привязываем отрасли
+            // Привязываем тэги
             $tagIds = [];
             $tagData = array_get($input, 'ProductTag', []);
             foreach ($tagData as $item) {

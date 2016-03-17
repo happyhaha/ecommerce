@@ -18,6 +18,10 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
     use SluggableTrait;
     use HasImage, HasFile;
 
+
+    public static $activeCategory;
+
+
     protected $sluggable = [
         'build_from' => 'node.title',
         'save_to'    => 'slug',
@@ -141,5 +145,44 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
             'product_id',
             'special_offer_id'
         );
+    }
+
+    public function getRecordUrl($abs = true)
+    {
+        if (self::$activeCategory) {
+            $category = self::$activeCategory;
+        } else {
+            $cats = $this->categories;
+            if ($cats) {
+                $category = $cats->first();
+            }
+        }
+
+        if ($category) {
+            $rootCats = $category->ancestors()->get();
+        }
+
+
+        if (isset($rootCats) && $rootCats->count()) {
+            $rootCategoryUrl = [];
+
+            foreach ($rootCats as $root) {
+                $rootCategoryUrl[] = $root->slug;
+            }
+
+            $rootCategoryUrl = implode('/', $rootCategoryUrl);
+            $rootCategoryUrl .= '/';
+
+            return route('catalog.show.nested', [
+                'rootCategory' => $rootCategoryUrl,
+                'product' => $this->slug,
+                'category' => $category?$category->slug:'',
+            ]);
+        } else {
+            return route('catalog.show', [
+                'product' => $this->slug,
+                'category' => $category?$category->slug:''
+            ]);
+        }
     }
 }

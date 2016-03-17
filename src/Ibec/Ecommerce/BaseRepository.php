@@ -18,6 +18,7 @@ abstract class BaseRepository
      */
     public function all($params)
     {
+
         $filters = [];
 
         $limit = isset($params['limit']) ? $params['limit'] : 15;
@@ -39,9 +40,9 @@ abstract class BaseRepository
                 $filters[] = [$attribute, $rule, $vl];
             }
         }
-
+//        $modelName = $this->modelName;
         $ret = $this->query()->where($filters)->orderBy($sort[0], $sort[1])->paginate($limit);
-
+//        $ret = $modelName::where($filters)->orderBy($sort[0], $sort[1])->paginate($limit);
         return $ret;
     }
 

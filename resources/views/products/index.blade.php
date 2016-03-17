@@ -7,7 +7,6 @@
         ['class' => 'btn btn-success'])
     !!}
 @endsection
-
 @section('sidebar')
 <div class="wrapper"></div>
 @endsection
@@ -44,6 +43,9 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <a class = 'btn btn-sm btn-primary'target="_blank" href="{{$item->getRecordUrl()}}">
+                                        Просмотр
+                                    </a>
                                     <a class = 'btn btn-sm btn-default' href="{{ admin_route('ecommerce.'.$codename.'.edit', [$item->id]) }}">
                                         {{ trans('admin::default.actions.edit') }}
                                     </a>

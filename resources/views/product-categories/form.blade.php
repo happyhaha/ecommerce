@@ -101,7 +101,6 @@
                             ])
 
 
-
                             @include('ecommerce::_form/group',[
                                 'label' => trans('ecommerce::default.'.$codename.'.fields.seo_title'),
                                 'input' => Form::text('ProductCategory['.$locale.'][seo_title]', $model->getNodeValue('seo_title',$locale), ['class' => 'form-control']),

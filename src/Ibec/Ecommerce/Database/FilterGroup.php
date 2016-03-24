@@ -34,7 +34,7 @@ class FilterGroup extends BaseModel implements Nodeable
      *
      * @var array
      */
-    protected $fillable = ['product_category_id', 'type', 'postfix', 'sort_order', 'status'];
+    protected $fillable = ['product_category_id', 'type', 'postfix', 'sort_order', 'status','position'];
 
     /**
      * FQ Node class name

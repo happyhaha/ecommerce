@@ -88,6 +88,7 @@ class ProductCategoriesController extends BaseController //temporary BaseControl
                     'type' => (string)$filter->type,
                     'postfix' => (string)$filter->postfix,
                     'status' => (string)($filter->status?$filter->status:0),
+                    'position' => (string) $filter->position
                 ];
                 foreach (config('app.locales') as $locale) {
                     $node = array_get($nodes, $locale, null);
@@ -98,7 +99,6 @@ class ProductCategoriesController extends BaseController //temporary BaseControl
                 $ret[] = $arr;
             }
         }
-
         return $ret;
     }
 

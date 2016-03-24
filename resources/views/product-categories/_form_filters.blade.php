@@ -25,6 +25,7 @@
                     <table class="table table-stripped">
                         <thead>
                         <tr>
+                            <th>Позиция</th>
                             @foreach(config('app.locales') as $localeIndex => $locale)
                                 <th>Название фильтра {{strtoupper($locale)}}</th>
                             @endforeach
@@ -47,6 +48,9 @@
                         </thead>
                         <tbody data-ng-if="PCat.models.filters.length>0">
                         <tr data-ng-repeat="item in PCat.models.filters">
+                            <td>
+                                <input data-ng-model="item.position" name="FilterGroup[@{{ $index }}][position]" type="text" style="width: 30px;text-indent:0px;padding:0px;" class="form-control">
+                            </td>
                             @foreach(config('app.locales') as $localeIndex => $locale)
                                 <td>
                                     <input type="text" class="form-control"

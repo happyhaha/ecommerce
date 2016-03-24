@@ -74,7 +74,7 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
 
     public function filters()
     {
-        return $this->hasMany('Ibec\Ecommerce\Database\FilterGroup');
+        return $this->hasMany('Ibec\Ecommerce\Database\FilterGroup')->orderBy('position', 'asc');
     }
 
     public function products()
@@ -104,7 +104,6 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
                 $filters = $filters->merge($ancestor->filters);
             }
         }
-
         return $filters;
     }
 
@@ -115,6 +114,7 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
         if ($parentFilters) {
             $filters = $filters->merge($parentFilters);
         }
+
         return $filters;
     }
 

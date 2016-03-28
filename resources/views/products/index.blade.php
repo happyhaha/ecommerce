@@ -16,6 +16,17 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 @include('ecommerce::_index/bunch_actions', ['codename' => $codename])
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <form action="">
+                            <input type="text" name="content" class="input-sm form-control" placeholder="Search" style="width:70%">
+                            <span class="input-group-btn">
+                                <button class="btn btn-sm btn-default" type="submit"><i class="fa fa-search"></i></button>
+                            </span>
+                        </form>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
                 <div class="table-responsive">
                     <table class="table table-striped b-t b-light">
                         <thead>

@@ -105,9 +105,8 @@ class ProductRepository extends BaseRepository
                 if ($filterGroup) {
                     foreach ($filterGroup as $filterRow) {
                         if (isset($filterRow['value']) && trim($filterRow['value'])!='') {
-                            $filterValue = trim($filterRow['value']);
+                            $filterValue = trim(str_replace(',','.',$filterRow['value']));
                             $groupId = $filterRow['group_id'];
-
                             // Ищем существующий фильтр
                             $checkFilter = Filter::whereHas('nodes', function ($query) use ($filterValue) {
                                 $query->where('title', '=', $filterValue);

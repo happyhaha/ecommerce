@@ -147,6 +147,13 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
         );
     }
 
+
+    public function brand()
+    {
+        return $this->belongsTo(ProductBrand::class, 'id');
+    }
+
+
     public function getRecordUrl($abs = true)
     {
         if (self::$activeCategory) {

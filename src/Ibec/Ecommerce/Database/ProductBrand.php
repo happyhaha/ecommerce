@@ -47,6 +47,26 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
         ];
     }
 
+    public function getCoverImage()
+    {
+        $image = $this->getFirstImage();
+        return $image->path;
+    }
+
+    public function getFirstImage()
+    {
+        return $this->images()->first();
+    }
+
+    public function products()
+    {
+        return $this->hasMany('Ibec\Ecommerce\Database\Product')->orderBy('id', 'asc');
+    }
+
+    public function getRecordUrl()
+    {
+        return '/b/'.$this->slug.'/list';
+    }
     /**
      * FQ Node class name
      * @return string

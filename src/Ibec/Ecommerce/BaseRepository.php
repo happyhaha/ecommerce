@@ -18,9 +18,7 @@ abstract class BaseRepository
      */
     public function all($params)
     {
-
         $filters = [];
-
         $limit = isset($params['limit']) ? $params['limit'] : 15;
         $sort = ['id', 'desc'];
 

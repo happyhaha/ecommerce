@@ -35,7 +35,6 @@ abstract class BaseController extends Controller
         $this->document->breadcrumbs([
             trans('ecommerce::default.'.$this->codename.'.index') => '',
         ]);
-
         $this->document->page->title(' > '.trans('ecommerce::default.'.$this->codename.'.index'));
         $items = $this->repository->all($request->all());
 

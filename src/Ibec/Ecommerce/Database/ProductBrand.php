@@ -75,4 +75,9 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
     {
         return 'Ibec\Ecommerce\Database\ProductBrandNode';
     }
+
+    public static function getByOffset($offset = null,$take = null)
+    {
+        return self::where('status',1)->skip($offset)->take($take)->get();
+    }
 }

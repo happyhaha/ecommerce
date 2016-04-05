@@ -50,7 +50,7 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
     public function getCoverImage()
     {
         $image = $this->getFirstImage();
-        return $image->path;
+        return $image->getSrc('large');
     }
 
     public function getFirstImage()

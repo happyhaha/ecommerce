@@ -50,6 +50,8 @@ class FilterGroup extends BaseModel implements Nodeable
         return $this->hasMany('Ibec\Ecommerce\Database\Filter', 'filter_group_id');
     }
 
+
+
     public function getMinFilter()
     {
         $min = null;

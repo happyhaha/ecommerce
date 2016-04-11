@@ -8,7 +8,7 @@ use Ibec\Translation\Nodeable;
 use Ibec\Ecommerce\Database\SpecialOffer;
 use Ibec\Media\HasImage;
 use Ibec\Media\HasFile;
-
+use \DB;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 
@@ -107,12 +107,21 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
         return $filters;
     }
 
-    public function parentFiltersAndSelf()
+    public function parentFiltersAndSelf($items)
     {
-        $filters = $this->filters;
+        //формирование массива с фильтрами
+        //если продукт НЕ имеет фильтра, то он не будет отображен
+        $filters = [];
+        foreach ($items as $item) {
+            foreach ($item->filters as $filter) {
+                $filters[] = $filter->filter_group;
+            }
+        }
+        $filters = array_unique($filters);
         $parentFilters = $this->parentFilters();
-        if ($parentFilters) {
-            $filters = $filters->merge($parentFilters);
+        if (is_array($parentFilters)) {
+//            $filters = $filters->merge($parentFilters);
+            $filters = array_merge($filters,$parentFilters);
         }
 
         return $filters;

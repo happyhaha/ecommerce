@@ -58,5 +58,14 @@ class Filter extends BaseModel implements Nodeable
         return $this->belongsTo(FilterGroup::class, 'filter_group_id');
     }
 
+    public function products()
+    {
+        return $this->belongsToMany('Ibec\Ecommerce\Database\Product', 'filter_product','filter_id','product_id');
+    }
+
+    public static function checkForProducts($products,$filterOne)
+    {
+
+    }
 
 }

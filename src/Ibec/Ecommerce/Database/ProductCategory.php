@@ -107,16 +107,32 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
         return $filters;
     }
 
-    public function parentFiltersAndSelf($items)
+    public function parentFiltersAndSelf()
+    {
+        //формирование массива с фильтрами
+        //если продукт НЕ имеет фильтра, то он не будет отображен
+
+        $filters = $this->filters;
+
+        $parentFilters = $this->parentFilters();
+        if (is_array($parentFilters)) {
+            $filters = $filters->merge($parentFilters);
+        }
+
+        return $filters;
+    }
+
+    public function getFilters($items)
     {
         //формирование массива с фильтрами
         //если продукт НЕ имеет фильтра, то он не будет отображен
         $filters = [];
-        foreach ($items as $item) {
+        foreach ($items->items() as $item) {
             foreach ($item->filters as $filter) {
                 $filters[] = $filter->filter_group;
             }
         }
+
         $filters = array_unique($filters);
         $parentFilters = $this->parentFilters();
         if (is_array($parentFilters)) {

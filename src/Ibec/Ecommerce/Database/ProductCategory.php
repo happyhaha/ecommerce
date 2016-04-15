@@ -140,7 +140,13 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
             $filters = array_merge($filters,$parentFilters);
         }
 
-        return $filters;
+        if(empty($filters))
+        {
+        }
+        else
+        {
+            return $filters;
+        }
     }
 
     public function makeTree($nodeList)
@@ -148,4 +154,5 @@ class ProductCategory extends BaseModel implements Nodeable, SluggableInterface
         $mapper = new SortedMapper($this);
         return $mapper->map($nodeList);
     }
+    
 }

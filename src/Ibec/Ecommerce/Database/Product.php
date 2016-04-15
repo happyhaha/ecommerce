@@ -7,7 +7,6 @@ use Ibec\Translation\HasNode;
 use Ibec\Translation\Nodeable;
 use Ibec\Media\HasImage;
 use Ibec\Media\HasFile;
-
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
 
@@ -127,6 +126,25 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
         );
     }
 
+    public function getProductFilters($count = 0)
+    {
+        $i = 0;
+        $filters = [];
+        foreach($this->filters as $filter)
+        {
+            if($filter->filter_group->status > 0)
+            {
+                while($i != $count)
+                {
+                    $filters[] = $filter;
+                    $i++;
+                }
+
+            }
+        }
+        return $filters;
+
+    }
     public function sectors()
     {
         return $this->belongsToMany(
@@ -192,4 +210,20 @@ class Product extends BaseModel implements Nodeable, SluggableInterface
             ]);
         }
     }
+
+    public static function getProductsCategories($items)
+    {
+        foreach ($items as $item) {
+            if(!empty($item->categories[0]))
+            {
+                $resultArray[] = $item->categories[0]->id;
+            }
+        }
+
+        if (!empty($resultArray)) {
+            return \App\Models\ProductCategory::whereIn('id',array_unique($resultArray))->get();
+        }
+    }
+
+    
 }

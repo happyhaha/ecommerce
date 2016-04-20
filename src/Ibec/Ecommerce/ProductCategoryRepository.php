@@ -42,7 +42,22 @@ class ProductCategoryRepository extends BaseRepository
             }
 
             $filters = array_get($inputData, 'FilterGroup', []);
-
+//            $filters[] = [
+//                'position'=>'1',
+//                'ru'=>['title'=>'Цена'],
+//                'id'=>'',
+//                'type'=>'3',
+//                'postfix'=>'KZT',
+//                'status'=>'1'
+//            ];
+//            $filters[] = [
+//                'position'=>'2',
+//                'ru'=>['title'=>'Бренды'],
+//                'id'=>'',
+//                'type'=>'2',
+//                'postfix'=>'',
+//                'status'=>'1'
+//            ];
             $filterIds = [];
             foreach ($filters as $filterData) {
                 if (isset($filterData['id']) && $filterData['id']!='') {

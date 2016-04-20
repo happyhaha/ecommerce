@@ -4,6 +4,7 @@ namespace Ibec\Ecommerce\Http\Controllers;
 
 use App\Models\Product;
 use Ibec\Admin\Services\Document\Document;
+use Ibec\Ecommerce\Database\Filter;
 use Illuminate\Contracts\Auth\Guard;
 use Response;
 use Illuminate\Http\Request;
@@ -42,6 +43,20 @@ class ProductCategoriesController extends BaseController //temporary BaseControl
             'codename' => $this->codename,
             ]);
     }
+    public function getTags(Request $request)
+    {
+        $id = $request->get('id');
+        $ret['id'] = $id;
+        $model = $this->repository->findByPk($id);
+
+        if ($model) {
+            $tags = $model->tags;
+            $ret['filters'] = $tags;
+        }
+
+        return $ret;
+    }
+
 
     public function getFilters(Request $request)
     {
@@ -59,19 +74,16 @@ class ProductCategoriesController extends BaseController //temporary BaseControl
             $parentFilters = $model->parentFilters();
             $ret['parent_filters'] = $this->compactFilters($parentFilters);
         }
+        else
+        {
+                $filters = [];
 
-        return $ret;
-    }
-
-    public function getTags(Request $request)
-    {
-        $id = $request->get('id');
-        $ret['id'] = $id;
-        $model = $this->repository->findByPk($id);
-
-        if ($model) {
-            $tags = $model->tags;
-            $ret['filters'] = $tags;
+                $filter->id = 1000;
+                $filter->type = 3;
+                $filter->postfix = "KZT";
+                $filter->status = 1;
+                $filter->position = 1000;
+                $ret['filters'] = $this->compactFilters();
         }
 
         return $ret;

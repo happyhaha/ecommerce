@@ -67,6 +67,11 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
     {
         return '/b/'.$this->slug.'/list';
     }
+
+    public function getBrandProductListUrl()
+    {
+        return '/b/'.$this->slug.'/list';
+    }
     /**
      * FQ Node class name
      * @return string

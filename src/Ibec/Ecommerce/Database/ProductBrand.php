@@ -67,11 +67,6 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
     {
         return '/b/'.$this->slug.'/list';
     }
-
-    public function getBrandProductListUrl()
-    {
-        return '/b/'.$this->slug.'/list';
-    }
     /**
      * FQ Node class name
      * @return string
@@ -85,4 +80,5 @@ class ProductBrand extends BaseModel implements Nodeable, SluggableInterface
     {
         return self::where('status',1)->skip($offset)->take($take)->get();
     }
+
 }

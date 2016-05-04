@@ -10,6 +10,7 @@ use Ibec\Ecommerce\ProductRepository;
 use Ibec\Ecommerce\ProductCategoryRepository;
 use Ibec\Ecommerce\ProductSectorRepository;
 use Ibec\Ecommerce\SpecialOfferRepository;
+use DB;
 
 class ProductsController extends BaseController
 {
@@ -148,5 +149,31 @@ class ProductsController extends BaseController
         }
 
         return $ret;
+    }
+
+    public function getRelatedProducts(Request $request)
+    {
+        $input = $request->input('term');
+
+        $query = '
+        SELECT product_nodes.product_id as id, CONCAT(product_nodes.title, \', №\', products.article_number) AS label, products.article_number as value FROM product_nodes
+        JOIN products ON products.id = product_nodes.product_id
+        WHERE product_nodes.title LIKE \'%'.$input.'%\' OR products.article_number LIKE \'%'.$input.'%\' ORDER BY product_nodes.title, products.article_number';
+        $res = DB::select($query);
+
+
+        return json_encode($res);
+    }
+
+    public function relatedProducts(Request $request)
+    {
+        $query = '
+        SELECT products.id as id, CONCAT(product_nodes.title, \', №\', products.article_number) AS label, products.article_number as value FROM product_nodes
+        JOIN products ON products.id = product_nodes.product_id
+        WHERE products.id IN (SELECT product_related.related_product_id FROM product_related
+            JOIN products ON products.id = product_related.product_id
+            WHERE product_related.product_id = '.$_POST['id'].')';
+
+        return json_encode(DB::select($query));
     }
 }

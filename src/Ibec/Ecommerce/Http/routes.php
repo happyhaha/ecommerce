@@ -8,7 +8,8 @@ $router->get('product-categories/get-filters', 'ProductCategoriesController@getF
 $router->get('product-categories/get-parent-filters', 'ProductCategoriesController@getParentFilters');
 $router->get('product-categories/get-tags', 'ProductCategoriesController@getTags');
 $router->resource('product-categories', 'ProductCategoriesController');
-
+$router->get('productsRelated','ProductsController@getRelatedProducts'); //запрос для autocomplete
+$router->post('relatedProducts','ProductsController@relatedProducts'); //для update'a товара, вытаскиваем сопутствующие товары(product_related)
 
 $router->bind('tree', function($value)
 {

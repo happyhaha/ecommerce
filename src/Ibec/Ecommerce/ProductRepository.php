@@ -35,7 +35,20 @@ class ProductRepository extends BaseRepository
             if (!$model->exists) {
                 $model->slug = $model->createSlug($mainData['ru']['title']);
             }
+
             $model->save();
+
+            //сохраняем сопутствующие продукты
+            DB::delete('delete from product_related  where product_related.product_id = ?', [$model->id]);
+            if(isset($input['relatedItems']))
+            {
+                foreach($input['relatedItems'] as $relatedItem)
+                {
+                    DB::insert('insert into product_related (product_id, related_product_id) values (?, ?)', [$model->id, trim($relatedItem)]);
+                }
+
+            }
+
             $this->saveNodes($model, 'product_id', $mainData);
 
             if ($this->hasImages($model)) {

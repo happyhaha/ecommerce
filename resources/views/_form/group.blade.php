@@ -7,7 +7,10 @@
         @if(isset($hint))
             <div class="text-muted">{{ $hint }}</div>
         @endif
-        @if(isset($errors) && $errors)
+        @if($label == 'Инструкция')
+            <?= ($model->exists && $model->file) ? '<span class="text-success">Инструкция загружена</span> :<b>'.$model->file.'</b>' : '<span class="text-warning">Инструкция не загружена</span>'?>
+        @endif
+    @if(isset($errors) && $errors)
             <div class="error text-danger">
                 @foreach($errors as $error)
                     <div>{{$error}}</div>

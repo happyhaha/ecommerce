@@ -35,7 +35,7 @@ class ProductRepository extends BaseRepository
             if (!$model->exists) {
                 $model->slug = $model->createSlug($mainData['ru']['title']);
             }
-
+            $model->file = (isset($input['file']) ? $input['file'] : $model->file);
             $model->save();
 
             //сохраняем сопутствующие продукты
